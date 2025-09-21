@@ -9,15 +9,13 @@
 
             <!-- Email Address -->
             <div>
-                <x-input-label for="email" :value="__('Email')" />
-                <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
+                <x-text-input id="email" placeholder="Email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
                 <x-input-error :messages="$errors->get('email')" class="mt-2" />
             </div>
 
             <!-- Password -->
             <div class="mt-4">
-                <x-input-label for="password" :value="__('Password')" />
-                <x-text-input id="password" class="block mt-1 w-full"
+                <x-text-input id="password" placeholder="Password" class="block mt-1 w-full"
                                 type="password"
                                 name="password"
                                 required autocomplete="current-password" />
@@ -38,17 +36,17 @@
                     {{ __('Log in') }}
                 </x-primary-button>
             </div>
-            <!-- Forgot Password + Free Trial -->
+            <!-- Forgot Password + sign up -->
             <div class="flex flex-col items-end mt-4 space-y-2">
                 @if (Route::has('password.request'))
-                    <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800" href="{{ route('password.request') }}">
+                    <a class="underline text-sm text-gray-600 dark:text-gray-700 hover:text-gray-400 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800" href="{{ route('password.request') }}">
                         {{ __('Forgot your password?') }}
                     </a>
                 @endif
 
                 <p class="text-sm text-gray-400 text-right">
-                    Not a member?
-                    <a href="/register" class="font-semibold text-indigo-400 hover:text-indigo-300">Sign up here.</a>
+                    Don't have an account?
+                    <a href="/register" class="font-semibold text-primary hover:text-orange-300">Sign up.</a>
                 </p>
             </div>
 
