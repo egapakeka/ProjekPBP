@@ -18,7 +18,7 @@
                 <a href="#about" class="hover:text-primary">Tentang</a>
                 <a href="#contact" class="hover:text-primary">Kontak</a>
             </nav>
-            <a href="{{ route('login') }}" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-indigo-700">
+            <a href="{{ route('login') }}" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-orange-400">
                 Login
             </a>
         </div>
