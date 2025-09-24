@@ -23,8 +23,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::resource('categories', CategoryController::class);
 });
 
-Route::middleware(['auth'])->prefix('admin')->group(function () {
-    Route::get('/orders', [OrderController::class, 'index'])->name('admin.orders.index');
+Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
 });
 
 
