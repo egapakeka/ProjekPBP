@@ -9,7 +9,14 @@ class Orders extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'total', 'status', 'address_text'];
+    protected $fillable = [
+        'user_id',
+        'total',
+        'discount',     
+        'final_amount', 
+        'status',
+        'address_text',
+    ];
 
     public $timestamps = false;
 
