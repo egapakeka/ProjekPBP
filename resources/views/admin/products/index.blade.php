@@ -20,6 +20,7 @@
                 <thead class="bg-gray-50">
                     <tr>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Gambar</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Produk</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kategori</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Harga</th>
@@ -35,7 +36,21 @@
                                 {{ $product->id }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
+                                @if($product->image)
+                                    <img src="{{ asset('storage/'.$product->image) }}" 
+                                         alt="{{ $product->name }}" 
+                                         class="w-16 h-16 object-cover rounded-lg">
+                                @else
+                                    <div class="w-16 h-16 bg-gray-200 rounded-lg flex items-center justify-center">
+                                        <i class="fas fa-image text-gray-400"></i>
+                                    </div>
+                                @endif
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="text-sm font-medium text-gray-900">{{ $product->name }}</div>
+                                @if($product->description)
+                                    <div class="text-sm text-gray-500">{{ Str::limit($product->description, 50) }}</div>
+                                @endif
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                 {{ $product->category->name ?? 'N/A' }}
@@ -80,7 +95,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
+                            <td colspan="8" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
                                 Belum ada produk yang terdaftar.
                             </td>
                         </tr>
