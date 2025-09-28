@@ -14,7 +14,7 @@
         <div class="container mx-auto flex justify-between items-center px-6 py-4">
             <a href="#" class="text-2xl font-bold text-primary">TokoKita</a>
             <nav class="space-x-6 hidden md:block">
-                <a href="#products" class="hover:text-primary">Produk</a>
+                <a href="{{ route('products.index') }}" class="hover:text-primary">Produk</a>
                 <a href="#about" class="hover:text-primary">Tentang</a>
                 <a href="#contact" class="hover:text-primary">Kontak</a>
             </nav>
