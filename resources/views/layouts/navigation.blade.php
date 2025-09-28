@@ -20,6 +20,10 @@
                         {{ __('Kategori') }}
                     </x-nav-link>
 
+                    <x-nav-link :href="route('admin.products.index')" :active="request()->routeIs('admin.products.*')">
+                        {{ __('Produk') }}
+                    </x-nav-link>
+
                     <x-nav-link :href="route('admin.orders.index')" :active="request()->routeIs('admin.orders.*')">
                         {{ __('Pesanan') }}
                     </x-nav-link>
