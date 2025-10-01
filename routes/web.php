@@ -9,6 +9,8 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\VoucherController;
 use App\Http\Controllers\Admin\AdminProfileController;
+use App\Http\Controllers\CategoryPublicController;
+
 
 // Landing page
 Route::get('/', function () {
