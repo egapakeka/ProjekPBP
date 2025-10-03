@@ -17,15 +17,6 @@
                         {{ __('Produk') }}
                     </x-nav-link>
 
-<<<<<<< HEAD
-                    <x-nav-link :href="route('admin.categories.index')" :active="request()->routeIs('admin.categories.*')">
-                        {{ __('Kategori') }}
-                    </x-nav-link>
-
-                    <x-nav-link :href="route('admin.orders.index')" :active="request()->routeIs('admin.orders.*')">
-                        {{ __('Pesanan') }}
-                    </x-nav-link>
-=======
                     <x-nav-link :href="route('categories.index')" :active="request()->routeIs('categories.*')">
                         {{ __('Kategori') }}
                     </x-nav-link>
@@ -65,9 +56,7 @@
                         <x-nav-link :href="route('admin.vouchers.index')" :active="request()->routeIs('admin.vouchers.*')">
                             {{ __('Voucher') }}
                         </x-nav-link>
-
                     @endauth
->>>>>>> felis
                 </div>
             </div>
 
