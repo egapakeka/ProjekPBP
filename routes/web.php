@@ -1,10 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-<<<<<<< HEAD
-use App\Http\Controllers\Admin\CategoryController;
-use App\Http\Controllers\Admin\OrderController;
-=======
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProductCatalogController;
@@ -13,7 +9,7 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\VoucherController;
 use App\Http\Controllers\Admin\AdminProfileController;
->>>>>>> felis
+use App\Http\Controllers\CategoryPublicController; // jangan lupa kalau memang ada controller ini
 
 // Landing page
 Route::get('/', function () {
@@ -54,29 +50,12 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-<<<<<<< HEAD
-Route::prefix('admin')->name('admin.')->group(function () {
-    Route::resource('categories', CategoryController::class);
-});
-
-Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
-});
-
-Route::middleware(['auth', 'can:isAdmin'])->group(function () {
-    Route::put('/admin/orders/{order}', [OrderController::class, 'updateStatus'])
-         ->name('admin.orders.updateStatus');
-});
-
-
-
-=======
 /*
 |--------------------------------------------------------------------------
 | Admin Area (harus login)
 |--------------------------------------------------------------------------
 */
-Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+Route::middleware(['auth', 'can:isAdmin'])->prefix('admin')->name('admin.')->group(function () {
     // CRUD Kategori & Produk
     Route::resource('categories', CategoryController::class);
     Route::resource('products', ProductController::class);
@@ -84,6 +63,7 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     // Orders
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
     Route::get('/orders/{id}', [OrderController::class, 'show'])->name('orders.show');
+    Route::put('/orders/{order}', [OrderController::class, 'updateStatus'])->name('orders.updateStatus');
 
     // Vouchers
     Route::resource('vouchers', VoucherController::class);
@@ -94,5 +74,4 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::post('/profile/password', [AdminProfileController::class, 'updatePassword'])->name('profile.password');
 });
 
->>>>>>> felis
 require __DIR__.'/auth.php';

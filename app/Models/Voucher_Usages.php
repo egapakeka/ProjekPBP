@@ -22,13 +22,5 @@ class Voucher_Usages extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
-<<<<<<< HEAD
-    }
-
-    public function order()
-    {
-        return $this->belongsTo(Orders::class);
-=======
->>>>>>> felis
     }
 }
