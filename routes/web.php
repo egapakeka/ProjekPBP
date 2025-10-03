@@ -1,21 +1,44 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Admin\CategoryController;
-use App\Http\Controllers\Admin\OrderController;
-use App\Http\Controllers\Admin\ProductController;
-use App\Http\Controllers\ProductCatalogController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ProductCatalogController;
+use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\OrderController;
+use App\Http\Controllers\Admin\VoucherController;
+use App\Http\Controllers\Admin\AdminProfileController;
 
+// Landing page
 Route::get('/', function () {
     return view('landing');
 });
 
-// Product Catalog Routes (accessible by visitors and users)
+/*
+|--------------------------------------------------------------------------
+| Pengunjung (tanpa login)
+|--------------------------------------------------------------------------
+*/
+
+// Produk
 Route::get('/products', [ProductCatalogController::class, 'index'])->name('products.index');
 Route::get('/products/{product}', [ProductCatalogController::class, 'show'])->name('products.show');
 
+// Kategori (public)
+Route::get('/categories', [CategoryPublicController::class, 'index'])->name('categories.index');
+Route::get('/categories/{category}', [CategoryPublicController::class, 'show'])->name('categories.show');
+
+// Halaman statis
+Route::view('/faq', 'pages.faq')->name('faq');
+Route::view('/help', 'pages.help')->name('help');
+Route::view('/about', 'pages.about')->name('about');
+
+/*
+|--------------------------------------------------------------------------
+| User Biasa (harus login)
+|--------------------------------------------------------------------------
+*/
 Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
@@ -26,15 +49,27 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::prefix('admin')->name('admin.')->group(function () {
+/*
+|--------------------------------------------------------------------------
+| Admin Area (harus login)
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+    // CRUD Kategori & Produk
     Route::resource('categories', CategoryController::class);
     Route::resource('products', ProductController::class);
+
+    // Orders
+    Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
+    Route::get('/orders/{id}', [OrderController::class, 'show'])->name('orders.show');
+
+    // Vouchers
+    Route::resource('vouchers', VoucherController::class);
+
+    // Profile Admin
+    Route::get('/profile', [AdminProfileController::class, 'edit'])->name('profile.edit');
+    Route::post('/profile', [AdminProfileController::class, 'update'])->name('profile.update');
+    Route::post('/profile/password', [AdminProfileController::class, 'updatePassword'])->name('profile.password');
 });
-
-Route::middleware(['auth'])->prefix('admin')->group(function () {
-    Route::get('/orders', [OrderController::class, 'index'])->name('admin.orders.index');
-});
-
-
 
 require __DIR__.'/auth.php';
