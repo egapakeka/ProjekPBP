@@ -11,17 +11,12 @@ class OrderController extends Controller
     {
         $status = request('status');
 
-        $orders = Orders::with(['user','items.product','voucherUsage.voucher'])
+        $orders = Orders::with(['user','items.product'])
             ->when($status, fn($q) => $q->where('status', $status))
             ->latest()
-            ->paginate(10);
+            ->paginate(10);   // <-- PENTING: gunakan paginate, bukan get()
 
         return view('admin.orders.index', compact('orders','status'));
     }
-
-    public function show($id)
-    {
-        $order = Orders::with(['user','items.product','vouchers'])->findOrFail($id);
-        return view('admin.orders.show', compact('order'));
-    }
 }
+
