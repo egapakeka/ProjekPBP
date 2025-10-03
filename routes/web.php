@@ -26,7 +26,7 @@ Route::get('/', function () {
 Route::get('/products', [ProductCatalogController::class, 'index'])->name('products.index');
 Route::get('/products/{product}', [ProductCatalogController::class, 'show'])->name('products.show');
 
-// Kategori (public)
+// Kategori
 Route::get('/categories', [CategoryPublicController::class, 'index'])->name('categories.index');
 Route::get('/categories/{category}', [CategoryPublicController::class, 'show'])->name('categories.show');
 
@@ -67,11 +67,6 @@ Route::middleware(['auth', 'can:isAdmin'])->prefix('admin')->name('admin.')->gro
 
     // Vouchers
     Route::resource('vouchers', VoucherController::class);
-
-    // Profile Admin
-    Route::get('/profile', [AdminProfileController::class, 'edit'])->name('profile.edit');
-    Route::post('/profile', [AdminProfileController::class, 'update'])->name('profile.update');
-    Route::post('/profile/password', [AdminProfileController::class, 'updatePassword'])->name('profile.password');
 });
 
 require __DIR__.'/auth.php';

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -22,5 +23,13 @@ class Voucher_Usages extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+<<<<<<<<< Temporary merge branch 1
+    }
+
+    public function order()
+    {
+        return $this->belongsTo(Orders::class);
+=========
+>>>>>>>>> Temporary merge branch 2
     }
 }
