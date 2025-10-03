@@ -17,7 +17,7 @@ class Voucher_Usages extends Model
 
     public function voucher()
     {
-        return $this->belongsTo(Voucher::class);
+        return $this->belongsTo(Vouchers::class);
     }
 
     public function user()
