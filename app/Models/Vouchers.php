@@ -24,7 +24,7 @@ class Vouchers extends Model
 
     public function users()
     {
-        return $this->belongsToMany(Users::class, 'voucher_usages')
+        return $this->belongsToMany(User::class, 'voucher_usages')
                     ->withPivot('order_id', 'used_at');
     }
 }
