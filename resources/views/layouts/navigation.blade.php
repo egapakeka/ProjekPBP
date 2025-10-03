@@ -57,9 +57,6 @@
                             {{ __('Voucher') }}
                         </x-nav-link>
 
-                        <x-nav-link :href="route('admin.profile.edit')" :active="request()->routeIs('admin.profile.*')">
-                            {{ __('Profile Admin') }}
-                        </x-nav-link>
                     @endauth
                 </div>
             </div>
@@ -146,10 +143,6 @@
 
                 <x-responsive-nav-link :href="route('admin.vouchers.index')" :active="request()->routeIs('admin.vouchers.*')">
                     {{ __('Voucher') }}
-                </x-responsive-nav-link>
-
-                <x-responsive-nav-link :href="route('admin.profile.edit')" :active="request()->routeIs('admin.profile.*')">
-                    {{ __('Profile Admin') }}
                 </x-responsive-nav-link>
             @endauth
         </div>
