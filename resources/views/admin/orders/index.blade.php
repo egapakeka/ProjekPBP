@@ -23,12 +23,6 @@
                     <th class="px-4 py-2 text-left">User</th>
                     <th class="px-4 py-2 text-left">Status</th>
                     <th class="px-4 py-2 text-left">Total</th>
-<<<<<<< HEAD
-=======
-                    <th class="px-4 py-2 text-left">Voucher</th>
-                    <th class="px-4 py-2 text-left">Diskon</th>
-                    <th class="px-4 py-2 text-left">Total Akhir</th>
->>>>>>> felis
                     <th class="px-4 py-2 text-left">Items</th>
                     <th class="px-4 py-2 text-left">Tanggal</th>
                     <th class="px-4 py-2 text-left">Aksi</th>
@@ -42,37 +36,12 @@
                         <td class="px-4 py-2 capitalize">{{ $order->status }}</td>
                         <td class="px-4 py-2">Rp{{ number_format($order->total,0,',','.') }}</td>
                         <td class="px-4 py-2">
-<<<<<<< HEAD
-=======
-                            @if($order->vouchers->isNotEmpty())
-                                {{ $order->vouchers->pluck('code')->join(', ') }}
-                            @else
-                                -
-                            @endif
-                        </td>
-                        <td class="px-4 py-2">
-                            @if(property_exists($order,'discount'))
-                                Rp{{ number_format($order->discount,0,',','.') }}
-                            @else
-                                Rp0
-                            @endif
-                        </td>
-                        <td class="px-4 py-2">
-                            @if(property_exists($order,'final_amount'))
-                                Rp{{ number_format($order->final_amount,0,',','.') }}
-                            @else
-                                Rp{{ number_format($order->total,0,',','.') }}
-                            @endif
-                        </td>
-                        <td class="px-4 py-2">
->>>>>>> felis
                             <ul class="list-disc ml-4">
                                 @foreach($order->items as $item)
                                     <li>{{ $item->product->name ?? 'Produk' }} (x{{ $item->quantity }})</li>
                                 @endforeach
                             </ul>
                         </td>
-<<<<<<< HEAD
                         <td class="px-4 py-2">{{ $order->created_at->format('d-m-Y H:i') }}</td>
 
                         <td class="px-4 py-2">
@@ -96,19 +65,6 @@
                 @empty
                     <tr>
                         <td colspan="7" class="px-4 py-2 text-center">Belum ada pesanan.</td>
-=======
-                        <td class="px-4 py-2">{{ optional($order->created_at)->format('d-m-Y H:i') }}</td>
-                        <td class="px-4 py-2">
-                            <a href="{{ route('admin.orders.show', $order->id) }}"
-                               class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded">
-                                Detail
-                            </a>
-                        </td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="10" class="px-4 py-2 text-center">Belum ada pesanan.</td>
->>>>>>> felis
                     </tr>
                 @endforelse
             </tbody>
