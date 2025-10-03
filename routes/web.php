@@ -27,6 +27,11 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
 });
 
+Route::middleware(['auth', 'can:isAdmin'])->group(function () {
+    Route::put('/admin/orders/{order}', [OrderController::class, 'updateStatus'])
+         ->name('admin.orders.updateStatus');
+});
+
 
 
 require __DIR__.'/auth.php';

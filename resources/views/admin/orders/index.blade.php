@@ -25,6 +25,7 @@
                     <th class="px-4 py-2 text-left">Total</th>
                     <th class="px-4 py-2 text-left">Items</th>
                     <th class="px-4 py-2 text-left">Tanggal</th>
+                    <th class="px-4 py-2 text-left">Aksi</th>
                 </tr>
             </thead>
             <tbody class="divide-y divide-gray-200">
@@ -42,10 +43,28 @@
                             </ul>
                         </td>
                         <td class="px-4 py-2">{{ $order->created_at->format('d-m-Y H:i') }}</td>
+
+                        <td class="px-4 py-2">
+                            <form action="{{ route('admin.orders.updateStatus', $order->id) }}"
+                                  method="POST" class="flex items-center gap-2">
+                                @csrf
+                                @method('PUT')
+                                <select name="status" class="border rounded px-2 py-1">
+                                    <option value="diproses" {{ $order->status=='diproses' ? 'selected' : '' }}>Diproses</option>
+                                    <option value="dikirim"  {{ $order->status=='dikirim'  ? 'selected' : '' }}>Dikirim</option>
+                                    <option value="selesai"  {{ $order->status=='selesai'  ? 'selected' : '' }}>Selesai</option>
+                                </select>
+                                <button type="submit"
+                                        class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700">
+                                    Simpan
+                                </button>
+                            </form>
+                        </td>
+                        {{-- ==== END FORM ==== --}}
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="6" class="px-4 py-2 text-center">Belum ada pesanan.</td>
+                        <td colspan="7" class="px-4 py-2 text-center">Belum ada pesanan.</td>
                     </tr>
                 @endforelse
             </tbody>
