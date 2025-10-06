@@ -20,9 +20,27 @@
                 <a href="{{ route('faq') }}" class="hover:text-primary">FAQ</a>
             </nav>
 
-            <a href="{{ route('login') }}" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-orange-400">
-                Login
-            </a>
+            {{-- Guest: Login --}}
+            @guest
+                <a href="{{ route('login') }}" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-orange-400">
+                    Login
+                </a>
+            @endguest
+
+            {{-- Authenticated: Profil / Logout --}}
+            @auth
+                <a href="{{ route('profile.edit') }}" class="bg-gray-100 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-200">
+                    Profil Saya
+                </a>
+
+                {{-- Logout Form --}}
+                <form method="POST" action="{{ route('logout') }}" class="inline">
+                    @csrf
+                    <button type="submit" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg">
+                        Logout
+                    </button>
+                </form>
+            @endauth
         </div>
     </header>
 

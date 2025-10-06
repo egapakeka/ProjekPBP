@@ -27,7 +27,7 @@ class DashboardController extends Controller
             })->count();
             $lowStockProducts = Products::where('is_active', 1)->where('stock', '<=', 10)->count();
 
-            return view('dashboard', compact('categoriesWithProducts', 'totalProducts', 'totalCategories', 'lowStockProducts'));
+            return view('admin.dashboard', compact('categoriesWithProducts', 'totalProducts', 'totalCategories', 'lowStockProducts'));
         } catch (\Exception $e) {
             // Fallback jika terjadi error
             $categoriesWithProducts = collect();
@@ -35,7 +35,9 @@ class DashboardController extends Controller
             $totalCategories = 0;
             $lowStockProducts = 0;
             
-            return view('dashboard', compact('categoriesWithProducts', 'totalProducts', 'totalCategories', 'lowStockProducts'));
+            return view('admin.dashboard', compact('categoriesWithProducts', 'totalProducts', 'totalCategories', 'lowStockProducts'));
         }
+
+        
     }
 }
