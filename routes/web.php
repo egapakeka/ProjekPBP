@@ -9,8 +9,7 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\VoucherController;
 use App\Http\Controllers\Admin\AdminProfileController;
-
-use App\Http\Controllers\CategoryPublicController; // jangan lupa kalau memang ada controller ini
+use App\Http\Controllers\CategoryPublicController;
 
 // Landing page
 Route::get('/', function () {
@@ -53,10 +52,10 @@ Route::middleware('auth')->group(function () {
 
 /*
 |--------------------------------------------------------------------------
-| Admin Area (harus login)
+| Admin Area (tanpa login & tanpa role check)
 |--------------------------------------------------------------------------
 */
-Route::middleware(['auth', 'can:isAdmin'])->prefix('admin')->name('admin.')->group(function () {
+Route::prefix('admin')->name('admin.')->group(function () {
     // CRUD Kategori & Produk
     Route::resource('categories', CategoryController::class);
     Route::resource('products', ProductController::class);
