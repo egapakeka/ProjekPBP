@@ -11,10 +11,19 @@ use App\Http\Controllers\Admin\VoucherController;
 use App\Http\Controllers\Admin\AdminProfileController;
 use App\Http\Controllers\CategoryPublicController;
 
+use Illuminate\Support\Facades\Auth;
+
 
 // Landing page
 Route::get('/', function () {
     return view('landing');
+});
+
+//user biasa
+Route::middleware(['auth'])->group(function () {
+    Route::get('/landing', function () {
+        return view('landing'); // pastikan file ada di resources/views/landing.blade.php
+    })->name('landing');
 });
 
 /*
@@ -22,7 +31,6 @@ Route::get('/', function () {
 | Pengunjung (tanpa login)
 |--------------------------------------------------------------------------
 */
-
 // Produk
 Route::get('/products', [ProductCatalogController::class, 'index'])->name('products.index');
 Route::get('/products/{product}', [ProductCatalogController::class, 'show'])->name('products.show');
@@ -41,9 +49,16 @@ Route::view('/about', 'pages.about')->name('about');
 | User Biasa (harus login)
 |--------------------------------------------------------------------------
 */
-Route::get('/dashboard', [DashboardController::class, 'index'])
-    ->middleware(['auth', 'verified'])
-    ->name('dashboard');
+
+
+Route::get('/force-logout', function () {
+    Auth::logout();
+    request()->session()->invalidate();
+    request()->session()->regenerateToken();
+
+    return redirect('/login');
+});
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -56,7 +71,8 @@ Route::middleware('auth')->group(function () {
 | Admin Area (harus login)
 |--------------------------------------------------------------------------
 */
-Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     // CRUD Kategori & Produk
     Route::resource('categories', CategoryController::class);
     Route::resource('products', ProductController::class);

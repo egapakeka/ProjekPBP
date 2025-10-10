@@ -19,7 +19,7 @@ class Vouchers extends Model
     // Relasi ke tabel usage
     public function usages()
     {
-        return $this->hasMany(VoucherUsage::class);
+        return $this->hasMany(Voucher_Usages::class);
     }
 
     // Relasi ke user melalui tabel usage
