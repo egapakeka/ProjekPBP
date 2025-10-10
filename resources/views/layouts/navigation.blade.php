@@ -59,7 +59,8 @@
 
                         <x-nav-link :href="route('admin.deliveries.index')" :active="request()->routeIs('admin.deliveries.*')">
                             {{ __('Pengiriman') }}
-                            
+                        </x-nav-link>
+                        
                         <x-nav-link :href="route('admin.profile.edit')" :active="request()->routeIs('admin.profile.*')">
                             {{ __('Profile Admin') }}
                         </x-nav-link>

@@ -71,6 +71,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     // Deliveries (Atur Pengiriman)
     Route::resource('deliveries', DeliveryController::class);
+
+    // Admin Profile
+    Route::get('/profile/edit', [AdminProfileController::class, 'edit'])->name('profile.edit');
 });
 
 require __DIR__.'/auth.php';
