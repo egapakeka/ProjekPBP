@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProductCatalogController;
+use App\Http\Controllers\DeliveryController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\OrderController;
@@ -67,6 +68,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     // Vouchers
     Route::resource('vouchers', VoucherController::class);
+
+    // Deliveries (Atur Pengiriman)
+    Route::resource('deliveries', DeliveryController::class);
 });
 
 require __DIR__.'/auth.php';

@@ -56,6 +56,10 @@
                         <x-nav-link :href="route('admin.vouchers.index')" :active="request()->routeIs('admin.vouchers.*')">
                             {{ __('Voucher') }}
                         </x-nav-link>
+
+                        <x-nav-link :href="route('admin.deliveries.index')" :active="request()->routeIs('admin.deliveries.*')">
+                            {{ __('Pengiriman') }}
+                        </x-nav-link>
                     @endauth
                 </div>
             </div>
@@ -143,6 +147,11 @@
                 <x-responsive-nav-link :href="route('admin.vouchers.index')" :active="request()->routeIs('admin.vouchers.*')">
                     {{ __('Voucher') }}
                 </x-responsive-nav-link>
+
+                <x-responsive-nav-link :href="route('admin.deliveries.index')" :active="request()->routeIs('admin.deliveries.*')">
+                    {{ __('Pengiriman') }}
+                </x-responsive-nav-link>
+
             @endauth
         </div>
 
