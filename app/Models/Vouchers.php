@@ -26,7 +26,8 @@ class Vouchers extends Model
     public function users()
     {
         return $this->belongsToMany(User::class, 'voucher_usages')
-                    ->withPivot('order_id', 'used_at');
+                    ->withPivot('order_id')
+                    ->withTimestamps();
     }
 
     public function isValidFor($user, $amount)

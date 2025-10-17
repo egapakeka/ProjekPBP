@@ -40,6 +40,7 @@ class Orders extends Model
     public function vouchers()
     {
         return $this->belongsToMany(Vouchers::class, 'voucher_usages')
-                    ->withPivot('user_id', 'used_at');
+                    ->withPivot('user_id')
+                    ->withTimestamps();
     }
 }
