@@ -1,6 +1,7 @@
 <html class="h-full bg-gray-900">
 <body class="h-full">
     <x-guest-layout>
+        @section('title', 'Login')
         <!-- Session Status -->
         <x-auth-session-status class="mb-4" :status="session('status')" />
 
