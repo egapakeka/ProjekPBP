@@ -10,20 +10,25 @@
                     </a>
                 </div>
 
-                <!-- Navigation Links -->
+                <!-- Navigation Links (landing-style) -->
                 <div class="hidden space-x-6 sm:-my-px sm:ms-10 sm:flex items-center">
-                    @if (!Request::is('admin*'))
-                        <x-nav-link :href="route('products.index')" :active="request()->routeIs('products.*')">
-                            {{ __('Produk') }}
-                        </x-nav-link>
+                    <!-- Branding like landing page -->
+                    <a href="{{ url('/') }}" class="text-2xl font-bold text-primary">TokoKita</a>
 
-                        <x-nav-link :href="route('categories.index')" :active="request()->routeIs('categories.*')">
-                            {{ __('Kategori') }}
-                        </x-nav-link>
-                    @endif
+                    <x-nav-link :href="route('products.index')" :active="request()->routeIs('products.*')">
+                        {{ __('Produk') }}
+                    </x-nav-link>
 
-                    <!-- Form Search - tetap tampil di semua halaman -->
-                    <form action="{{ route('products.index') }}" method="GET" class="flex items-center space-x-2">
+                    <!-- Point to landing anchors so pages like Produk jump to sections on landing -->
+                    <a href="{{ url('/#about') }}" class="text-gray-600 hover:text-gray-800 px-3 py-2 text-sm font-medium">Tentang</a>
+                    <a href="{{ url('/#help') }}" class="text-gray-600 hover:text-gray-800 px-3 py-2 text-sm font-medium">Bantuan</a>
+
+                    <x-nav-link :href="route('faq')" :active="request()->routeIs('pages.faq')">
+                        {{ __('FAQ') }}
+                    </x-nav-link>
+
+                    <!-- Search form still available -->
+                    <form action="{{ route('products.index') }}" method="GET" class="flex items-center space-x-2 ml-4">
                         <input 
                             type="text" 
                             name="search" 
@@ -36,30 +41,10 @@
                         </button>
                     </form>
 
-                    <!-- Menu Admin (hanya jika login) -->
+                    <!-- Admin / Auth-specific links preserved -->
                     @auth
                         <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">
                             {{ __('Dashboard') }}
-                        </x-nav-link>
-
-                        <x-nav-link :href="route('admin.categories.index')" :active="request()->routeIs('admin.categories.*')">
-                            {{ __('Ubah Kategori') }}
-                        </x-nav-link>
-
-                        <x-nav-link :href="route('admin.products.index')" :active="request()->routeIs('admin.products.*')">
-                            {{ __('Ubah Produk') }}
-                        </x-nav-link>
-
-                        <x-nav-link :href="route('admin.orders.index')" :active="request()->routeIs('admin.orders.*')">
-                            {{ __('Pesanan') }}
-                        </x-nav-link>
-
-                        <x-nav-link :href="route('admin.vouchers.index')" :active="request()->routeIs('admin.vouchers.*')">
-                            {{ __('Voucher') }}
-                        </x-nav-link>
-
-                        <x-nav-link :href="route('admin.deliveries.index')" :active="request()->routeIs('admin.deliveries.*')">
-                            {{ __('Pengiriman') }}
                         </x-nav-link>
 
                         @if(auth()->user()->role !== 'admin')
@@ -73,7 +58,6 @@
                                 @endif
                             </x-nav-link>
                         @endif
-
                     @endauth
                 </div>
             </div>
