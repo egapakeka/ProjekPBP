@@ -1,8 +1,8 @@
-<nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
+<nav x-data="{ open: false }" class="sticky top-0 z-50 bg-white border-b border-gray-100 shadow">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
-            <div class="flex">
+            <div class="flex items-center space-x-4">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
                     <a href="{{ url('/') }}">
@@ -10,90 +10,90 @@
                     </a>
                 </div>
 
+                <!-- Search (desktop) -->
+                <form action="{{ route('products.index') }}" method="GET" class="hidden md:flex items-center space-x-2">
+                    <div class="flex items-center space-x-2 rounded-lg border border-gray-300 bg-white px-3 py-1">
+                        <i class="fas fa-search text-gray-400"></i>
+                        <input
+                            type="text"
+                            name="search"
+                            placeholder="Cari produk..."
+                            value="{{ request('search') }}"
+                            class="w-56 border-0 bg-transparent text-sm focus:outline-none focus:ring-0"
+                        >
+                    </div>
+                    <button type="submit" class="hidden">
+                        {{ __('Cari') }}
+                    </button>
+                </form>
+
                 <!-- Navigation Links -->
-                <div class="hidden space-x-6 sm:-my-px sm:ms-10 sm:flex items-center">
-                    @if (!Request::is('admin*'))
-                        <x-nav-link :href="route('products.index')" :active="request()->routeIs('products.*')">
-                            {{ __('Produk') }}
+                <div class="hidden space-x-6 md:ms-6 md:flex items-center">
+                    @php($user = auth()->user())
+                    @php($isAdmin = $user && $user->role === 'admin')
+
+                    @if($isAdmin)
+                        <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">
+                            {{ __('Dashboard') }}
                         </x-nav-link>
 
-                        <x-nav-link :href="route('categories.index')" :active="request()->routeIs('categories.*')">
-                            {{ __('Kategori') }}
+                        <x-nav-link :href="route('admin.categories.index')" :active="request()->routeIs('admin.categories.*')">
+                            {{ __('Ubah Kategori') }}
                         </x-nav-link>
+
+                        <x-nav-link :href="route('admin.products.index')" :active="request()->routeIs('admin.products.*')">
+                            {{ __('Ubah Produk') }}
+                        </x-nav-link>
+
+                        <x-nav-link :href="route('admin.orders.index')" :active="request()->routeIs('admin.orders.*')">
+                            {{ __('Pesanan') }}
+                        </x-nav-link>
+
+                        <x-nav-link :href="route('admin.vouchers.index')" :active="request()->routeIs('admin.vouchers.*')">
+                            {{ __('Voucher') }}
+                        </x-nav-link>
+
+                        <x-nav-link :href="route('admin.deliveries.index')" :active="request()->routeIs('admin.deliveries.*')">
+                            {{ __('Pengiriman') }}
+                        </x-nav-link>
+                    @else
+                        <a href="{{ route('products.index') }}" class="text-gray-500 hover:text-gray-700 px-3 py-2 text-sm font-medium">
+                            {{ __('Produk') }}
+                        </a>
+                        <a href="{{ url('/#about') }}" class="text-gray-500 hover:text-gray-700 px-3 py-2 text-sm font-medium">
+                            {{ __('Tentang') }}
+                        </a>
+                        <a href="{{ url('/#help') }}" class="text-gray-500 hover:text-gray-700 px-3 py-2 text-sm font-medium">
+                            {{ __('Bantuan') }}
+                        </a>
+                        <a href="{{ route('faq') }}" class="text-gray-500 hover:text-gray-700 px-3 py-2 text-sm font-medium">
+                            {{ __('FAQ') }}
+                        </a>
                     @endif
 
-                    <!-- Form Search - tetap tampil di semua halaman -->
-                    <form action="{{ route('products.index') }}" method="GET" class="flex items-center space-x-2">
-                        <input 
-                            type="text" 
-                            name="search" 
-                            placeholder="Cari produk..." 
-                            value="{{ request('search') }}" 
-                            class="border rounded px-3 py-1 text-sm focus:outline-none"
-                        >
-                        <button type="submit" class="bg-blue-600 text-white px-3 py-1 rounded text-sm">
-                            Cari
-                        </button>
-                    </form>
-
-                    <!-- Menu Admin / User -->
-                    @auth
-                        @if(auth()->user()->role === 'admin')
-                            <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">
-                                {{ __('Dashboard') }}
-                            </x-nav-link>
-
-                            <x-nav-link :href="route('admin.categories.index')" :active="request()->routeIs('admin.categories.*')">
-                                {{ __('Ubah Kategori') }}
-                            </x-nav-link>
-
-                            <x-nav-link :href="route('admin.products.index')" :active="request()->routeIs('admin.products.*')">
-                                {{ __('Ubah Produk') }}
-                            </x-nav-link>
-
-                            <x-nav-link :href="route('admin.orders.index')" :active="request()->routeIs('admin.orders.*')">
-                                {{ __('Pesanan') }}
-                            </x-nav-link>
-
-                            <x-nav-link :href="route('admin.vouchers.index')" :active="request()->routeIs('admin.vouchers.*')">
-                                {{ __('Voucher') }}
-                            </x-nav-link>
-
-                            <x-nav-link :href="route('admin.deliveries.index')" :active="request()->routeIs('admin.deliveries.*')">
-                                {{ __('Pengiriman') }}
-                            </x-nav-link>
-                        @else
-                            @php($cartCount = auth()->user()->cart?->items()->sum('qty') ?? 0)
-                            <a href="{{ route('products.index') }}" class="text-gray-500 hover:text-gray-700 px-3 py-2 text-sm font-medium">
-                                {{ __('Produk') }}
-                            </a>
-                            <a href="{{ route('landing').'#about' }}" class="text-gray-500 hover:text-gray-700 px-3 py-2 text-sm font-medium">
-                                {{ __('Tentang') }}
-                            </a>
-                            <a href="{{ route('landing').'#help' }}" class="text-gray-500 hover:text-gray-700 px-3 py-2 text-sm font-medium">
-                                {{ __('Bantuan') }}
-                            </a>
-                            <a href="{{ route('faq') }}" class="text-gray-500 hover:text-gray-700 px-3 py-2 text-sm font-medium">
-                                {{ __('FAQ') }}
-                            </a>
-                            <a href="{{ route('cart.index') }}" class="text-gray-500 hover:text-gray-700 px-3 py-2 text-sm font-medium inline-flex items-center">
-                                {{ __('Keranjang') }}
-                                <span data-cart-count-badge class="ml-2 inline-flex items-center rounded-full bg-primary/10 px-2 py-0.5 text-xs font-semibold text-primary {{ $cartCount > 0 ? '' : 'hidden' }}">
-                                    <span data-cart-count-value>{{ $cartCount }}</span>
-                                </span>
-                            </a>
-                        @endif
-                    @endauth
                 </div>
             </div>
 
             <!-- Settings Dropdown -->
-            <div class="hidden sm:flex sm:items-center sm:ms-6">
+            <div class="hidden sm:flex sm:items-center sm:ms-6 space-x-4">
                 @auth
+                    @php($user = auth()->user())
+                    @php($isAdmin = $user->role === 'admin')
+                    @if(!$isAdmin)
+                        @php($cartCount = $user->cart?->items()->sum('qty') ?? 0)
+                        <a href="{{ route('cart.index') }}" class="relative inline-flex items-center rounded-lg bg-primary/10 px-3 py-2 text-sm font-medium text-primary hover:bg-primary/20">
+                            <i class="fas fa-shopping-cart mr-2"></i>
+                            <span>{{ __('Keranjang') }}</span>
+                            <span data-cart-count-badge class="ml-2 inline-flex items-center rounded-full bg-primary px-2 py-0.5 text-xs font-semibold text-white {{ $cartCount > 0 ? '' : 'hidden' }}">
+                                <span data-cart-count-value>{{ $cartCount }}</span>
+                            </span>
+                        </a>
+                    @endif
+
                     <x-dropdown align="right" width="48">
                         <x-slot name="trigger">
                             <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700">
-                                <div>{{ Auth::user()->name }}</div>
+                                <div>{{ $user->name }}</div>
                                 <div class="ms-1">
                                     <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                                         <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
@@ -103,9 +103,6 @@
                         </x-slot>
 
                         <x-slot name="content">
-                            @php($user = auth()->user())
-                            @php($isAdmin = $user->role === 'admin')
-
                             <x-dropdown-link :href="$isAdmin ? route('admin.profile.edit') : route('profile.edit')">
                                 {{ __('Profil Saya') }}
                             </x-dropdown-link>
@@ -120,8 +117,9 @@
                         </x-slot>
                     </x-dropdown>
                 @else
-                    <!-- Tombol Login untuk Pengunjung -->
-                    <a href="{{ route('login') }}" class="text-gray-600 hover:text-gray-800 px-3">Login</a>
+                    <a href="{{ route('login') }}" class="bg-primary text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-orange-400">
+                        {{ __('Login') }}
+                    </a>
                 @endauth
             </div>
 
@@ -257,8 +255,10 @@
                     </form>
                 </div>
             @else
-                <div class="px-4">
-                    <a href="{{ route('login') }}" class="text-gray-600 hover:text-gray-800">Login</a>
+                <div class="px-4 pb-4">
+                    <a href="{{ route('login') }}" class="block w-full text-center bg-primary text-white py-2 rounded-lg text-sm font-medium hover:bg-orange-400">
+                        {{ __('Login') }}
+                    </a>
                 </div>
             @endauth
         </div>

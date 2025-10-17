@@ -13,7 +13,7 @@
 
     <div class="py-6">
         <div class="max-w-5xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white shadow-sm sm:rounded-lg">
+            <div class="bg-white shadow-sm sm:rounded-lg" x-data>
                 <div class="px-6 py-6">
                     @if (session('status'))
                         <div class="mb-4 rounded-md bg-green-50 px-4 py-3 text-sm text-green-700">
@@ -30,10 +30,21 @@
                             </a>
                         </div>
                     @else
+                        @php
+                            $selectedItems = $cart->items->filter(fn ($item) => $item->product);
+                            $initialSelectedCount = $selectedItems->sum('qty');
+                            $initialSelectedTotal = $selectedItems->reduce(function ($carry, $item) {
+                                return $carry + ($item->product->price * $item->qty);
+                            }, 0);
+                        @endphp
+
                         <div class="overflow-x-auto">
                             <table class="min-w-full divide-y divide-gray-200">
                                 <thead class="bg-gray-50">
                                     <tr>
+                                        <th class="px-4 py-3 text-center text-xs font-medium uppercase tracking-wider text-gray-500">
+                                            <input type="checkbox" data-cart-select-all class="rounded border-gray-300 text-primary focus:ring-primary" checked>
+                                        </th>
                                         <th class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">{{ __('Produk') }}</th>
                                         <th class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">{{ __('Harga') }}</th>
                                         <th class="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">{{ __('Jumlah') }}</th>
@@ -46,6 +57,9 @@
                                         @php($price = $item->product->price ?? 0)
                                         @php($maxQty = $item->product->stock ?? 0)
                                         <tr data-cart-item-row data-item-id="{{ $item->id }}">
+                                            <td class="px-4 py-4 text-center">
+                                                <input type="checkbox" data-cart-select class="rounded border-gray-300 text-primary focus:ring-primary" {{ $item->product ? 'checked' : '' }} @if(!$item->product) disabled @endif>
+                                            </td>
                                             <td class="whitespace-nowrap px-4 py-4 text-sm font-medium text-gray-900">
                                                 {{ $item->product->name ?? __('Produk tidak tersedia') }}
                                             </td>
@@ -96,14 +110,14 @@
                             </table>
                         </div>
 
-                        <div class="mt-6 flex items-center justify-between">
-                            <div class="text-sm text-gray-500">
-                                {{ __('Total produk:') }} <span data-cart-total-count>{{ $cart->items->sum('qty') }}</span>
-                            </div>
-                            <div class="text-xl font-bold text-gray-900">
-                                {{ __('Total:') }} <span data-cart-total-amount>Rp {{ number_format($total, 0, ',', '.') }}</span>
-                            </div>
+                    <div class="mt-6 flex items-center justify-between">
+                        <div class="text-sm text-gray-500">
+                            {{ __('Total produk dipilih:') }} <span data-cart-total-count>{{ $initialSelectedCount }}</span>
                         </div>
+                        <div class="text-xl font-bold text-gray-900">
+                            {{ __('Total:') }} <span data-cart-total-amount>Rp {{ number_format($initialSelectedTotal, 0, ',', '.') }}</span>
+                        </div>
+                    </div>
                     @endif
                 </div>
             </div>
@@ -113,7 +127,9 @@
     @if ($cart->items->isNotEmpty())
         <script>
             document.addEventListener('DOMContentLoaded', () => {
-                const forms = document.querySelectorAll('.cart-item-form');
+                    const forms = document.querySelectorAll('.cart-item-form');
+                    const checkboxes = document.querySelectorAll('[data-cart-select]');
+                    const selectAll = document.querySelector('[data-cart-select-all]');
                 if (!forms.length) return;
 
                 const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
@@ -141,32 +157,37 @@
                     let runningCount = 0;
 
                     forms.forEach((form) => {
-                    const price = parseFloat(form.dataset.price || '0');
-                    const input = form.querySelector('[data-cart-qty-input]');
-                    const subtotalTarget = document.getElementById(form.dataset.subtotalTarget);
-                    if (!input || input.disabled) {
-                        return;
-                    }
-                    let qty = parseInt(input.value, 10);
-                    const max = parseInt(form.dataset.max || '0', 10);
+                        const price = parseFloat(form.dataset.price || '0');
+                        const input = form.querySelector('[data-cart-qty-input]');
+                        const subtotalTarget = document.getElementById(form.dataset.subtotalTarget);
+                        if (!input || input.disabled) {
+                            return;
+                        }
+                        const checkbox = form.closest('tr')?.querySelector('[data-cart-select]');
+                        let qty = parseInt(input.value, 10);
+                        const max = parseInt(form.dataset.max || '0', 10);
 
-                    if (!Number.isFinite(qty) || qty < 1) {
-                        qty = 1;
-                        input.value = qty;
-                    }
+                        if (!Number.isFinite(qty) || qty < 1) {
+                            qty = 1;
+                            input.value = qty;
+                        }
 
-                    if (Number.isFinite(max) && max > 0 && qty > max) {
-                        qty = max;
-                        input.value = max;
-                    }
+                        if (Number.isFinite(max) && max > 0 && qty > max) {
+                            qty = max;
+                            input.value = max;
+                        }
 
-                    const subtotal = price * qty;
-                    runningTotal += subtotal;
-                    runningCount += qty;
-
+                        const subtotal = price * qty;
                         if (subtotalTarget) {
                             subtotalTarget.textContent = currencyFormatter.format(subtotal);
                         }
+
+                        if (checkbox && !checkbox.checked) {
+                            return;
+                        }
+
+                        runningTotal += subtotal;
+                        runningCount += qty;
                     });
 
                     if (totalCountEl) {
@@ -278,6 +299,7 @@
                 forms.forEach((form) => {
                     const input = form.querySelector('[data-cart-qty-input]');
                     const indicator = form.querySelector('[data-sync-indicator]');
+                    const checkbox = form.closest('tr')?.querySelector('[data-cart-select]');
                     let debounceTimer;
 
                     if (!input || input.disabled) {
@@ -309,9 +331,31 @@
                         const qty = parseInt(input.value, 10) || 1;
                         sendUpdate(form, qty, indicator, input);
                     });
+
+                    if (checkbox) {
+                        checkbox.addEventListener('change', () => {
+                            if (selectAll) {
+                                const allChecked = Array.from(checkboxes).every(cb => cb.checked || cb.disabled);
+                                selectAll.checked = allChecked;
+                            }
+                            recalcTotals();
+                        });
+                    }
                 });
 
                 recalcTotals();
+
+                if (selectAll) {
+                    selectAll.addEventListener('change', () => {
+                        const checked = selectAll.checked;
+                        checkboxes.forEach((cb) => {
+                            if (!cb.disabled) {
+                                cb.checked = checked;
+                            }
+                        });
+                        recalcTotals();
+                    });
+                }
             });
         </script>
     @endif

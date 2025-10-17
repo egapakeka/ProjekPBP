@@ -10,64 +10,7 @@
 </head>
 <body class="bg-gray-50 text-gray-800">
 
-    {{-- Navbar khusus landing --}}
-    <header class="bg-white shadow-md fixed w-full z-50">
-        <div class="container mx-auto flex justify-between items-center px-6 py-4">
-            <a href="{{ url('/') }}" class="text-2xl font-bold text-primary">TokoKita</a>
-
-            <nav class="space-x-6 hidden md:block">
-                <a href="{{ route('products.index') }}" class="hover:text-primary">Produk</a>
-                <!-- Use in-page anchors so Tentang & Bantuan scroll on landing -->
-                <a href="#about" class="hover:text-primary">Tentang</a>
-                <a href="#help" class="hover:text-primary">Bantuan</a>
-                <a href="{{ route('faq') }}" class="hover:text-primary">FAQ</a>
-                @auth
-                    @if(auth()->user()->role !== 'admin')
-                        <a href="{{ route('cart.index') }}" class="hover:text-primary">Keranjang</a>
-                    @endif
-                @endauth
-            </nav>
-
-            {{-- Guest: Login --}}
-            @guest
-                <a href="{{ route('login') }}" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-orange-400">
-                    Login
-                </a>
-            @endguest
-
-            {{-- Authenticated: Profil / Logout --}}
-            @auth
-                @php($user = auth()->user())
-                @php($isAdmin = $user->role === 'admin')
-                @php($profileLink = $isAdmin ? route('admin.profile.edit') : route('profile.edit'))
-
-                <div x-data="{ open: false }" class="relative">
-                    <button @click="open = !open" type="button"
-                            class="inline-flex items-center rounded-lg bg-gray-100 px-4 py-2 text-sm font-medium text-gray-800 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-primary">
-                        <span class="mr-2">{{ $user->name }}</span>
-                        <svg class="h-4 w-4 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                        </svg>
-                    </button>
-
-                    <div x-cloak x-show="open" @click.outside="open = false" x-transition
-                         class="absolute right-0 mt-2 w-56 origin-top-right rounded-lg border border-gray-200 bg-white shadow-lg">
-                        <div class="py-2">
-                            <a href="{{ $profileLink }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                {{ __('Profil Saya') }}
-                            </a>
-                            <form method="POST" action="{{ route('logout') }}">
-                                @csrf
-                                <button type="submit" class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50">
-                                    {{ __('Log Out') }}
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            @endauth
-        </div>
-    </header>
+    @include('layouts.navigation')
 
     {{-- Hero --}}
     <section class="pt-28 pb-20 bg-primary text-white text-center">
