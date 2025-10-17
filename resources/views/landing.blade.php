@@ -57,6 +57,25 @@
     </section>
 
     {{-- Produk Unggulan --}}
+    <section class="py-12 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-center mb-6">Produk Unggulan</h2>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                @foreach ($products as $product)
+                    <div class="bg-white shadow-md rounded-lg overflow-hidden">
+                        <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}" class="h-48 w-full object-cover">
+                        <div class="p-4">
+                            <h3 class="font-semibold text-lg">{{ $product->name }}</h3>
+                            <p class="text-gray-600 text-sm">{{ $product->description }}</p>
+                            <p class="text-orange-500 font-bold mt-2">Rp {{ number_format($product->price, 0, ',', '.') }}</p>
+                            <a href="{{ route('products.index') }}" class="inline-block mt-3 bg-orange-500 hover:bg-orange-600 text-white text-sm px-4 py-2 rounded">Lihat Detail</a>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    </section>
 
 
     {{-- Tentang (ringkas, halaman lengkap ada di /about) --}}
@@ -72,7 +91,7 @@
 
     {{-- Kontak ringkas, halaman lengkap di /help --}}
     <section id="help" class="py-20 container mx-auto px-6 scroll-mt-28">
-        <h2 class="text-3xl font-bold text-center mb-12">Hubungi Kami</h2>
+        <h2 class="text-3xl font-bold text-center mb-6">Hubungi Kami</h2>
         <form class="max-w-xl mx-auto space-y-6">
             <input type="text" placeholder="Nama" class="w-full p-3 border rounded-lg">
             <input type="email" placeholder="Email" class="w-full p-3 border rounded-lg">
