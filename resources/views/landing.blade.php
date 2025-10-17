@@ -81,6 +81,8 @@
     </section>
 
 
+
+
     {{-- Tentang (ringkas, halaman lengkap ada di /about) --}}
     <section id="about" class="py-20 bg-gray-100 scroll-mt-28">
         <div class="container mx-auto px-6 text-center">
@@ -94,7 +96,7 @@
 
     {{-- Kontak ringkas, halaman lengkap di /help --}}
     <section id="help" class="py-20 container mx-auto px-6 scroll-mt-28">
-        <h2 class="text-3xl font-bold text-center mb-12">Hubungi Kami</h2>
+        <h2 class="text-3xl font-bold text-center mb-6">Hubungi Kami</h2>
         <form class="max-w-xl mx-auto space-y-6">
             <input type="text" placeholder="Nama" class="w-full p-3 border rounded-lg">
             <input type="email" placeholder="Email" class="w-full p-3 border rounded-lg">
