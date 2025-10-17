@@ -15,8 +15,9 @@
 
             <nav class="space-x-6 hidden md:block">
                 <a href="{{ route('products.index') }}" class="hover:text-primary">Produk</a>
-                <a href="{{ route('about') }}" class="hover:text-primary">Tentang</a>
-                <a href="{{ route('help') }}" class="hover:text-primary">Bantuan</a>
+                <!-- Use in-page anchors so Tentang & Bantuan scroll on landing -->
+                <a href="#about" class="hover:text-primary">Tentang</a>
+                <a href="#help" class="hover:text-primary">Bantuan</a>
                 <a href="{{ route('faq') }}" class="hover:text-primary">FAQ</a>
             </nav>
 
@@ -79,7 +80,7 @@
     </section>
 
     {{-- Tentang (ringkas, halaman lengkap ada di /about) --}}
-    <section class="py-20 bg-gray-100">
+    <section id="about" class="py-20 bg-gray-100 scroll-mt-28">
         <div class="container mx-auto px-6 text-center">
             <h2 class="text-3xl font-bold mb-6">Tentang TokoKita</h2>
             <p class="max-w-2xl mx-auto text-gray-600">
@@ -90,7 +91,7 @@
     </section>
 
     {{-- Kontak ringkas, halaman lengkap di /help --}}
-    <section class="py-20 container mx-auto px-6">
+    <section id="help" class="py-20 container mx-auto px-6 scroll-mt-28">
         <h2 class="text-3xl font-bold text-center mb-12">Hubungi Kami</h2>
         <form class="max-w-xl mx-auto space-y-6">
             <input type="text" placeholder="Nama" class="w-full p-3 border rounded-lg">
@@ -101,6 +102,13 @@
             </a>
         </form>
     </section>
+
+    {{-- Enable smooth scrolling for in-page anchors --}}
+    <style>
+        html { scroll-behavior: smooth; }
+        /* If Tailwind config doesn't include scroll-margin, use utility fallback */
+        .scroll-mt-28 { scroll-margin-top: 7rem; }
+    </style>
 
     {{-- Footer default (FAQ / Bantuan / Tentang) --}}
     @include('layouts.footer')

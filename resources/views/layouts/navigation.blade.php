@@ -130,6 +130,15 @@
                 {{ __('Kategori') }}
             </x-responsive-nav-link>
 
+            <!-- Tentang & Bantuan (link to landing anchors) -->
+            <x-responsive-nav-link :href="url('/#about')">
+                {{ __('Tentang') }}
+            </x-responsive-nav-link>
+
+            <x-responsive-nav-link :href="url('/#help')">
+                {{ __('Bantuan') }}
+            </x-responsive-nav-link>
+
             <!-- Menu Admin (hanya jika login) -->
             @auth
                 <x-responsive-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('dashboard')">
