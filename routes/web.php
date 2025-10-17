@@ -14,7 +14,6 @@ use App\Http\Controllers\Admin\VoucherController;
 use App\Http\Controllers\Admin\AdminProfileController;
 use App\Http\Controllers\CategoryPublicController;
 use App\Http\Controllers\CartController;
-
 use App\Http\Controllers\LandingController;
 
 /*
@@ -23,6 +22,12 @@ use App\Http\Controllers\LandingController;
 |--------------------------------------------------------------------------
 */
 Route::get('/', [LandingController::class, 'index'])->name('landing');
+use App\Models\Products;
+
+Route::get('/', function () {
+    $products = Products::take(8)->get();
+    return view('landing', compact('products'));
+});
 
 /*
 |--------------------------------------------------------------------------
