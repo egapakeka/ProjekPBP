@@ -11,17 +11,18 @@
                 </div>
 
                 <!-- Navigation Links -->
-                <div class="hidden space-x-6 sm:-my-px sm:ms-10 sm:flex">
-                    <!-- Menu Pengunjung -->
-                    <x-nav-link :href="route('products.index')" :active="request()->routeIs('products.*')">
-                        {{ __('Produk') }}
-                    </x-nav-link>
+                <div class="hidden space-x-6 sm:-my-px sm:ms-10 sm:flex items-center">
+                    @if (!Request::is('admin*'))
+                        <x-nav-link :href="route('products.index')" :active="request()->routeIs('products.*')">
+                            {{ __('Produk') }}
+                        </x-nav-link>
 
-                    <x-nav-link :href="route('categories.index')" :active="request()->routeIs('categories.*')">
-                        {{ __('Kategori') }}
-                    </x-nav-link>
+                        <x-nav-link :href="route('categories.index')" :active="request()->routeIs('categories.*')">
+                            {{ __('Kategori') }}
+                        </x-nav-link>
+                    @endif
 
-                    <!-- Form Search -->
+                    <!-- Form Search - tetap tampil di semua halaman -->
                     <form action="{{ route('products.index') }}" method="GET" class="flex items-center space-x-2">
                         <input 
                             type="text" 
@@ -37,16 +38,16 @@
 
                     <!-- Menu Admin (hanya jika login) -->
                     @auth
-                        <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('dashboard')">
+                        <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">
                             {{ __('Dashboard') }}
                         </x-nav-link>
 
                         <x-nav-link :href="route('admin.categories.index')" :active="request()->routeIs('admin.categories.*')">
-                            {{ __('Kategori Admin') }}
+                            {{ __('Ubah Kategori') }}
                         </x-nav-link>
 
                         <x-nav-link :href="route('admin.products.index')" :active="request()->routeIs('admin.products.*')">
-                            {{ __('Produk Admin') }}
+                            {{ __('Ubah Produk') }}
                         </x-nav-link>
 
                         <x-nav-link :href="route('admin.orders.index')" :active="request()->routeIs('admin.orders.*')">
@@ -121,27 +122,43 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            <!-- Menu Pengunjung -->
-            <x-responsive-nav-link :href="route('products.index')" :active="request()->routeIs('products.*')">
-                {{ __('Produk') }}
-            </x-responsive-nav-link>
+            @if (!Request::is('admin*'))
+                <x-responsive-nav-link :href="route('products.index')" :active="request()->routeIs('products.*')">
+                    {{ __('Produk') }}
+                </x-responsive-nav-link>
 
-            <x-responsive-nav-link :href="route('categories.index')" :active="request()->routeIs('categories.*')">
-                {{ __('Kategori') }}
-            </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('categories.index')" :active="request()->routeIs('categories.*')">
+                    {{ __('Kategori') }}
+                </x-responsive-nav-link>
+            @endif
+
+            <form action="{{ route('products.index') }}" method="GET" class="px-4 py-2">
+                <div class="flex items-center space-x-2">
+                    <input 
+                        type="text" 
+                        name="search" 
+                        placeholder="Cari produk..." 
+                        value="{{ request('search') }}" 
+                        class="w-full border rounded px-3 py-1 text-sm focus:outline-none"
+                    >
+                    <button type="submit" class="bg-blue-600 text-white px-3 py-1 rounded text-sm">
+                        Cari
+                    </button>
+                </div>
+            </form>
 
             <!-- Menu Admin (hanya jika login) -->
             @auth
-                <x-responsive-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('dashboard')">
+                <x-responsive-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">
                     {{ __('Dashboard') }}
                 </x-responsive-nav-link>
 
                 <x-responsive-nav-link :href="route('admin.categories.index')" :active="request()->routeIs('admin.categories.*')">
-                    {{ __('Kategori Admin') }}
+                    {{ __('Ubah Kategori') }}
                 </x-responsive-nav-link>
 
                 <x-responsive-nav-link :href="route('admin.products.index')" :active="request()->routeIs('admin.products.*')">
-                    {{ __('Produk Admin') }}
+                    {{ __('Ubah Produk') }}
                 </x-responsive-nav-link>
 
                 <x-responsive-nav-link :href="route('admin.orders.index')" :active="request()->routeIs('admin.orders.*')">
