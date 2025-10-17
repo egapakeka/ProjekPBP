@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('question');
             $table->text('answer');
             $table->timestamp('created_at')->useCurrent();
-            $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
+            $table->timestamps();
         });
     }
 
