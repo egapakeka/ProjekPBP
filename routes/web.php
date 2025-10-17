@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
+
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProductCatalogController;
@@ -12,24 +14,18 @@ use App\Http\Controllers\Admin\VoucherController;
 use App\Http\Controllers\Admin\AdminProfileController;
 use App\Http\Controllers\CategoryPublicController;
 
-use Illuminate\Support\Facades\Auth;
-
-
-// Landing page
+/*
+|--------------------------------------------------------------------------
+| Landing Page
+|--------------------------------------------------------------------------
+*/
 Route::get('/', function () {
     return view('landing');
-});
-
-//user biasa
-Route::middleware(['auth'])->group(function () {
-    Route::get('/landing', function () {
-        return view('landing'); // pastikan file ada di resources/views/landing.blade.php
-    })->name('landing');
-});
+})->name('home');
 
 /*
 |--------------------------------------------------------------------------
-| Pengunjung (tanpa login)
+| Pengunjung (Tanpa Login)
 |--------------------------------------------------------------------------
 */
 // Produk
@@ -47,34 +43,37 @@ Route::view('/about', 'pages.about')->name('about');
 
 /*
 |--------------------------------------------------------------------------
-| User Biasa (harus login)
+| User (Harus Login)
 |--------------------------------------------------------------------------
 */
+Route::middleware(['auth'])->group(function () {
+    Route::get('/landing', function () {
+        return view('landing');
+    })->name('landing');
 
-
-Route::get('/force-logout', function () {
-    Auth::logout();
-    request()->session()->invalidate();
-    request()->session()->regenerateToken();
-
-    return redirect('/login');
-});
-
-
-Route::middleware('auth')->group(function () {
+    // Profile
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    // Logout paksa (opsional)
+    Route::get('/force-logout', function () {
+        Auth::logout();
+        request()->session()->invalidate();
+        request()->session()->regenerateToken();
+
+        return redirect()->route('login');
+    })->name('force.logout');
 });
 
 /*
 |--------------------------------------------------------------------------
-| Admin Area (tanpa login & tanpa role check)
+| Admin Area (Harus Login & Role Admin)
 |--------------------------------------------------------------------------
 */
-Route::prefix('admin')->name('admin.')->group(function () {
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
     // CRUD Kategori & Produk
     Route::resource('categories', CategoryController::class);
     Route::resource('products', ProductController::class);
@@ -94,4 +93,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/profile/edit', [AdminProfileController::class, 'edit'])->name('profile.edit');
 });
 
+/*
+|--------------------------------------------------------------------------
+| Auth Routes (Login, Register, Forgot Password, dll)
+|--------------------------------------------------------------------------
+*/
 require __DIR__.'/auth.php';
