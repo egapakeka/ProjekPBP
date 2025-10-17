@@ -23,6 +23,7 @@
                     <th class="px-4 py-2 text-left">User</th>
                     <th class="px-4 py-2 text-left">Status</th>
                     <th class="px-4 py-2 text-left">Total</th>
+                    <th class="px-4 py-2 text-left">Voucher</th>
                     <th class="px-4 py-2 text-left">Items</th>
                     <th class="px-4 py-2 text-left">Tanggal</th>
                     <th class="px-4 py-2 text-left">Aksi</th>
@@ -34,11 +35,25 @@
                         <td class="px-4 py-2">{{ $order->id }}</td>
                         <td class="px-4 py-2">{{ $order->user->name ?? '-' }}</td>
                         <td class="px-4 py-2 capitalize">{{ $order->status }}</td>
-                        <td class="px-4 py-2">Rp{{ number_format($order->total,0,',','.') }}</td>
+                        <td class="px-4 py-2">
+                            <div>Rp{{ number_format($order->final_amount ?? $order->total,0,',','.') }}</div>
+                            @if(($order->discount ?? 0) > 0)
+                                <div class="text-xs text-gray-500">{{ __('Diskon:') }} Rp{{ number_format($order->discount,0,',','.') }}</div>
+                            @endif
+                        </td>
+                        <td class="px-4 py-2 text-sm text-gray-600">
+                            @forelse($order->voucherUsages as $usage)
+                                <span class="inline-flex items-center rounded-full bg-primary/10 px-2 py-1 text-xs font-semibold text-primary">
+                                    {{ $usage->voucher->code ?? '-' }}
+                                </span>
+                            @empty
+                                <span class="text-gray-400">-</span>
+                            @endforelse
+                        </td>
                         <td class="px-4 py-2">
                             <ul class="list-disc ml-4">
                                 @foreach($order->items as $item)
-                                    <li>{{ $item->product->name ?? 'Produk' }} (x{{ $item->quantity }})</li>
+                                    <li>{{ $item->product->name ?? 'Produk' }} (x{{ $item->qty }})</li>
                                 @endforeach
                             </ul>
                         </td>

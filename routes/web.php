@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\VoucherController;
 use App\Http\Controllers\Admin\AdminProfileController;
 use App\Http\Controllers\CategoryPublicController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\CheckoutController;
 
 use App\Http\Controllers\LandingController;
 
@@ -68,6 +69,10 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/cart', [CartController::class, 'store'])->name('cart.store');
     Route::patch('/cart/items/{item}', [CartController::class, 'update'])->name('cart.items.update');
     Route::delete('/cart/items/{item}', [CartController::class, 'destroy'])->name('cart.items.destroy');
+
+    // Checkout
+    Route::post('/checkout/summary', [CheckoutController::class, 'summary'])->name('checkout.summary');
+    Route::post('/checkout/complete', [CheckoutController::class, 'store'])->name('checkout.store');
 
     // Logout paksa (opsional)
     Route::get('/force-logout', function () {

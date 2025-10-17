@@ -15,6 +15,11 @@
         <div class="max-w-5xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white shadow-sm sm:rounded-lg" x-data>
                 <div class="px-6 py-6">
+                    @if (session('error'))
+                        <div class="mb-4 rounded-md bg-red-50 px-4 py-3 text-sm text-red-700">
+                            {{ session('error') }}
+                        </div>
+                    @endif
                     @if (session('status'))
                         <div class="mb-4 rounded-md bg-green-50 px-4 py-3 text-sm text-green-700">
                             {{ session('status') }}
@@ -110,12 +115,22 @@
                             </table>
                         </div>
 
-                    <div class="mt-6 flex items-center justify-between">
+                    <div class="mt-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                         <div class="text-sm text-gray-500">
                             {{ __('Total produk dipilih:') }} <span data-cart-total-count>{{ $initialSelectedCount }}</span>
                         </div>
-                        <div class="text-xl font-bold text-gray-900">
-                            {{ __('Total:') }} <span data-cart-total-amount>Rp {{ number_format($initialSelectedTotal, 0, ',', '.') }}</span>
+                        <div class="flex flex-col items-start md:items-end gap-3">
+                            <div class="text-xl font-bold text-gray-900">
+                                {{ __('Total:') }} <span data-cart-total-amount>Rp {{ number_format($initialSelectedTotal, 0, ',', '.') }}</span>
+                            </div>
+                            <form method="POST" action="{{ route('checkout.summary') }}" class="flex items-center gap-3" data-cart-checkout-form>
+                                @csrf
+                                <input type="hidden" name="selected_items" value="" data-cart-selected-input>
+                                <button type="submit" class="inline-flex items-center rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-orange-500 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" data-cart-checkout-btn disabled>
+                                    <i class="fas fa-credit-card mr-2"></i>
+                                    {{ __('Checkout') }}
+                                </button>
+                            </form>
                         </div>
                     </div>
                     @endif
@@ -130,13 +145,32 @@
                     const forms = document.querySelectorAll('.cart-item-form');
                     const checkboxes = document.querySelectorAll('[data-cart-select]');
                     const selectAll = document.querySelector('[data-cart-select-all]');
-                if (!forms.length) return;
+                    const checkoutForm = document.querySelector('[data-cart-checkout-form]');
+                    const selectedInput = checkoutForm?.querySelector('[data-cart-selected-input]');
+                    const checkoutBtn = checkoutForm?.querySelector('[data-cart-checkout-btn]');
+                    if (!forms.length) return;
 
-                const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-                const currencyFormatter = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 });
-                const totalCountEl = document.querySelector('[data-cart-total-count]');
-                const totalAmountEl = document.querySelector('[data-cart-total-amount]');
-                const cartBadges = document.querySelectorAll('[data-cart-count-badge]');
+                    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                    const currencyFormatter = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 });
+                    const totalCountEl = document.querySelector('[data-cart-total-count]');
+                    const totalAmountEl = document.querySelector('[data-cart-total-amount]');
+                    const cartBadges = document.querySelectorAll('[data-cart-count-badge]');
+
+                    const getSelectedIds = () => Array.from(checkboxes)
+                        .filter((cb) => cb.checked && !cb.disabled)
+                        .map((cb) => cb.closest('[data-cart-item-row]')?.dataset.itemId)
+                        .filter(Boolean);
+
+                    const toggleCheckoutBtn = (count) => {
+                        if (!checkoutBtn) return;
+                        if (count > 0) {
+                            checkoutBtn.disabled = false;
+                            checkoutBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                        } else {
+                            checkoutBtn.disabled = true;
+                            checkoutBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                        }
+                    };
 
                 const updateBadge = (count) => {
                     cartBadges.forEach((badge) => {
@@ -150,6 +184,23 @@
                             valueEl.textContent = count;
                         }
                     });
+                };
+
+                const updateSelectionState = (count) => {
+                    const ids = getSelectedIds();
+                    if (selectedInput) {
+                        selectedInput.value = ids.join(',');
+                    }
+                    toggleCheckoutBtn(count);
+
+                    if (selectAll) {
+                        const available = Array.from(checkboxes).filter((cb) => !cb.disabled);
+                        if (available.length === 0) {
+                            selectAll.checked = false;
+                        } else {
+                            selectAll.checked = available.every((cb) => cb.checked);
+                        }
+                    }
                 };
 
                 const recalcTotals = () => {
@@ -199,6 +250,7 @@
                     }
 
                     updateBadge(runningCount);
+                    updateSelectionState(runningCount);
                 };
 
                 const sendUpdate = (form, qty, indicator, input) => {
@@ -334,15 +386,11 @@
 
                     if (checkbox) {
                         checkbox.addEventListener('change', () => {
-                            if (selectAll) {
-                                const allChecked = Array.from(checkboxes).every(cb => cb.checked || cb.disabled);
-                                selectAll.checked = allChecked;
-                            }
                             recalcTotals();
                         });
                     }
                 });
-
+                
                 recalcTotals();
 
                 if (selectAll) {
@@ -354,6 +402,15 @@
                             }
                         });
                         recalcTotals();
+                    });
+                }
+
+                if (checkoutForm) {
+                    checkoutForm.addEventListener('submit', (event) => {
+                        if (!selectedInput || !selectedInput.value) {
+                            event.preventDefault();
+                            alert('{{ __('Pilih minimal satu produk untuk checkout.') }}');
+                        }
                     });
                 }
             });

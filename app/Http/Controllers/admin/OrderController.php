@@ -12,7 +12,7 @@ class OrderController extends Controller
     {
         $status = request('status');
 
-        $orders = Orders::with(['user','items.product','voucherUsage.voucher'])
+        $orders = Orders::with(['user', 'items.product', 'voucherUsages.voucher'])
             ->when($status, fn($q) => $q->where('status', $status))
             ->latest()
             ->paginate(10);

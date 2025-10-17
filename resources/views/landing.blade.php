@@ -6,7 +6,6 @@
     <title>TokoKita - Landing Page</title>
     <link rel="icon" type="image/png" href="{{ asset('images/mainLogo/logo.png') }}">
     <link rel="apple-touch-icon" href="{{ asset('images/mainLogo/logo.png') }}">
-        <title>{{ config('app.name') }} - @yield('title', 'Landing Page')</title>
     @vite(['resources/css/app.css','resources/js/app.js'])
 </head>
 <body class="bg-gray-50 text-gray-800">

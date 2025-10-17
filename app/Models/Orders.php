@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+use App\Models\Voucher_Usages;
+
 class Orders extends Model
 {
     use HasFactory;
@@ -18,7 +20,7 @@ class Orders extends Model
         'address_text',
     ];
 
-    public $timestamps = false;
+    public $timestamps = true;
 
     public function user()
     {
@@ -27,7 +29,12 @@ class Orders extends Model
 
     public function items()
     {
-        return $this->hasMany(Order_Items::class);
+        return $this->hasMany(Order_Items::class, 'order_id');
+    }
+
+    public function voucherUsages()
+    {
+        return $this->hasMany(Voucher_Usages::class, 'order_id');
     }
 
     public function vouchers()

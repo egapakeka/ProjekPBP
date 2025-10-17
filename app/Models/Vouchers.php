@@ -56,4 +56,19 @@ class Vouchers extends Model
 
         return true;
     }
+
+    public function calculateDiscount(float $amount): float
+    {
+        if ($this->discount_type === 'percent') {
+            $discount = $amount * ($this->discount_value / 100);
+        } else {
+            $discount = $this->discount_value;
+        }
+
+        if (! is_null($this->max_discount)) {
+            $discount = min($discount, $this->max_discount);
+        }
+
+        return (float) max(min($discount, $amount), 0);
+    }
 }

@@ -1,0 +1,13 @@
+*** Begin Patch
+*** Update File: app/Models/Order_Items.php
+@@
+ class Order_Items extends Model
+ {
+     use HasFactory;
+ 
++    protected  = 'order_items';
+     protected  = ['order_id', 'product_id', 'price', 'qty', 'subtotal'];
+ 
+     public  = false;
+*** End Patch
+

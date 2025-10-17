@@ -10,10 +10,10 @@ class Voucher_Usages extends Model
     use HasFactory;
 
     protected $fillable = [
-        'voucher_id', 'user_id', 'order_id', 'used_at',
+        'voucher_id', 'user_id', 'order_id',
     ];
 
-    public $timestamps = false;
+    public $timestamps = true;
 
     public function voucher()
     {
