@@ -23,12 +23,13 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
                 <div class="flex items-center">
-                    <a href="{{ url('/') }}" class="text-xl font-bold text-gray-800">
+                    @php($dashboardUrl = auth()->check() && auth()->user()->role === 'admin' ? route('admin.dashboard') : route('home'))
+                    <a href="{{ $dashboardUrl }}" class="text-xl font-bold text-gray-800">
                         {{ config('app.name', 'Laravel') }}
                     </a>
                     <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
-                        <a href="{{ url('/') }}" class="text-gray-500 hover:text-gray-700 px-3 py-2 text-sm font-medium">
-                            Home
+                        <a href="{{ $dashboardUrl }}" class="text-gray-500 hover:text-gray-700 px-3 py-2 text-sm font-medium">
+                            Dashboard
                         </a>
                         <a href="{{ route('products.index') }}" class="text-primary hover:text-orange-600 px-3 py-2 text-sm font-medium">
                             Produk
@@ -65,7 +66,7 @@
             <nav class="flex" aria-label="Breadcrumb">
                 <ol class="inline-flex items-center space-x-1 md:space-x-3">
                     <li class="inline-flex items-center">
-                        <a href="{{ url('/') }}" class="text-gray-500 hover:text-gray-700">Home</a>
+                        <a href="{{ $dashboardUrl }}" class="text-gray-500 hover:text-gray-700">Dashboard</a>
                     </li>
                     <li>
                         <div class="flex items-center">

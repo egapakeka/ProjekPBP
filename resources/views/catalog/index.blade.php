@@ -19,48 +19,17 @@
 </head>
 <body class="font-sans antialiased bg-gray-100">
 
-    <!-- Navigation -->
-    <nav class="bg-white shadow-sm border-b">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16">
-                <div class="flex items-center">
-                    <a href="{{ url('/') }}" class="text-xl font-bold text-gray-800">
-                        {{ config('app.name', 'Laravel') }}
-                    </a>
-                    <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
-                        <a href="{{ url('/') }}" class="text-gray-500 hover:text-gray-700 px-3 py-2 text-sm font-medium">
-                            Home
-                        </a>
-                        <a href="{{ route('products.index') }}" class="text-primary border-b-2 border-primary px-3 py-2 text-sm font-medium">
-                            Produk
-                        </a>
-                    </div>
-                </div>
-                <div class="flex items-center space-x-4">
-                    @auth
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
-                            <button type="submit" class="text-gray-500 hover:text-gray-700 px-3 py-2 text-sm font-medium">
-                                Logout
-                            </button>
-                        </form>
-                    @else
-                        <a href="{{ route('login') }}" class="text-primary hover:text-orange-600 px-3 py-2 text-sm font-medium">
-                            Login
-                        </a>
-                        <a href="{{ route('register') }}" class="bg-primary hover:bg-orange-400 text-white px-4 py-2 rounded-lg text-sm font-medium">
-                            Register
-                        </a>
-                    @endauth
-                </div>
-            </div>
-        </div>
-    </nav>
-
-
     <!-- Main Content -->
     <main class="py-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            @if(auth()->check() && auth()->user()->role === 'admin')
+                <div class="mb-4">
+                    <a href="{{ route('admin.dashboard') }}" class="inline-flex items-center text-sm font-semibold text-primary hover:text-orange-500">
+                        <i class="fas fa-arrow-left mr-2"></i>{{ __('Kembali ke Dashboard Admin') }}
+                    </a>
+                </div>
+            @endif
+
             <!-- Header -->
             <div class="mb-8">
                 <h1 class="text-3xl font-bold text-gray-900">Katalog Produk</h1>
