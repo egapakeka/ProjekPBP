@@ -9,6 +9,8 @@ class Voucher_Usages extends Model
 {
     use HasFactory;
 
+    protected $table = 'voucher_usages';
+
     protected $fillable = [
         'voucher_id', 'user_id', 'order_id',
     ];

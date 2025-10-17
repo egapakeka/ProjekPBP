@@ -57,7 +57,7 @@
                                 @endforeach
                             </ul>
                         </td>
-                        <td class="px-4 py-2">{{ $order->created_at->format('d-m-Y H:i') }}</td>
+                        <td class="px-4 py-2">{{ $order->created_at ? $order->created_at->format('d-m-Y H:i') : '-' }}</td>
 
                         <td class="px-4 py-2">
                             <form action="{{ route('admin.orders.updateStatus', $order->id) }}"
