@@ -57,16 +57,16 @@
                             {{ __('Pengiriman') }}
                         </x-nav-link>
                     @else
-                        <a href="{{ route('products.index') }}" class="text-gray-500 hover:text-gray-700 px-3 py-2 text-sm font-medium">
+                        <a href="{{ route('products.index') }}" class="text-gray-500 hover:text-gray-700 px-3 py-2 text-sm font-medium hover:text-primary">
                             {{ __('Produk') }}
                         </a>
-                        <a href="{{ url('/#about') }}" class="text-gray-500 hover:text-gray-700 px-3 py-2 text-sm font-medium">
+                        <a href="{{ url('/#about') }}" class="text-gray-500 hover:text-gray-700 px-3 py-2 text-sm font-medium hover:text-primary">
                             {{ __('Tentang') }}
                         </a>
-                        <a href="{{ url('/#help') }}" class="text-gray-500 hover:text-gray-700 px-3 py-2 text-sm font-medium">
+                        <a href="{{ url('/#help') }}" class="text-gray-500 hover:text-gray-700 px-3 py-2 text-sm font-medium hover:text-primary">
                             {{ __('Bantuan') }}
                         </a>
-                        <a href="{{ route('faq') }}" class="text-gray-500 hover:text-gray-700 px-3 py-2 text-sm font-medium">
+                        <a href="{{ route('faq') }}" class="text-gray-500 hover:text-gray-700 px-3 py-2 text-sm font-medium hover:text-primary">
                             {{ __('FAQ') }}
                         </a>
                     @endif
@@ -81,10 +81,9 @@
                     @php($isAdmin = $user->role === 'admin')
                     @if(!$isAdmin)
                         @php($cartCount = $user->cart?->items()->sum('qty') ?? 0)
-                        <a href="{{ route('cart.index') }}" class="relative inline-flex items-center rounded-lg bg-primary/10 px-3 py-2 text-sm font-medium text-primary hover:bg-primary/20">
-                            <i class="fas fa-shopping-cart mr-2"></i>
-                            <span>{{ __('Keranjang') }}</span>
-                            <span data-cart-count-badge class="ml-2 inline-flex items-center rounded-full bg-primary px-2 py-0.5 text-xs font-semibold text-white {{ $cartCount > 0 ? '' : 'hidden' }}">
+                        <a href="{{ route('cart.index') }}" class="relative inline-flex items-center rounded-lg px-3 py-2 text-sm font-medium text-gray-700 hover:text-primary">
+                            <i class="fas fa-shopping-cart mr-2" style="font-size: 19px;"></i>
+                            <span data-cart-count-badge class="ml-2 inline-flex items-center rounded-full bg-primary px-2 py-0.5 text-xs font-semibold text-gray-700 {{ $cartCount > 0 ? '' : 'hidden' }}">
                                 <span data-cart-count-value>{{ $cartCount }}</span>
                             </span>
                         </a>
