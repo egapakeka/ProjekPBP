@@ -57,27 +57,7 @@
     </section>
 
     {{-- Produk Unggulan --}}
-    <section id="products" class="py-20 container mx-auto px-6">
-        <h2 class="text-3xl font-bold text-center mb-12">Produk Unggulan</h2>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            @foreach ([
-                ['name' => 'Sepatu Sneakers', 'price' => 'Rp 350.000', 'img' => asset('images/sepatu.jpeg')],
-                ['name' => 'Tas Ransel',     'price' => 'Rp 250.000', 'img' => asset('images/tas.jpeg')],
-                ['name' => 'Jam Tangan',     'price' => 'Rp 500.000', 'img' => asset('images/jam.jpeg')],
-            ] as $product)
-                <div class="bg-white shadow-lg rounded-lg overflow-hidden">
-                    <img src="{{ $product['img'] }}" alt="{{ $product['name'] }}" class="w-full h-56 object-cover">
-                    <div class="p-4">
-                        <h3 class="text-lg font-semibold">{{ $product['name'] }}</h3>
-                        <p class="text-black font-bold">{{ $product['price'] }}</p>
-                        <a href="{{ route('products.index') }}" class="block mt-4 bg-primary text-white text-center py-2 rounded-lg hover:bg-indigo-700">
-                            Beli Sekarang
-                        </a>
-                    </div>
-                </div>
-            @endforeach
-        </div>
-    </section>
+
 
     {{-- Tentang (ringkas, halaman lengkap ada di /about) --}}
     <section id="about" class="py-20 bg-gray-100 scroll-mt-28">

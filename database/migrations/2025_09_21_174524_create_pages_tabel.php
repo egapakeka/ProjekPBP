@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('slug')->unique();
             $table->longText('content');
             $table->timestamp('created_at')->useCurrent();
-            $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
+            $table->timestamps();
         });
     }
 

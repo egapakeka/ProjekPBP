@@ -47,9 +47,15 @@ Route::view('/about', 'pages.about')->name('about');
 |--------------------------------------------------------------------------
 */
 Route::middleware(['auth'])->group(function () {
+    // Route landing untuk user login
     Route::get('/landing', function () {
         return view('landing');
     })->name('landing');
+
+    // Route dashboard yang redirect ke landing
+    Route::get('/dashboard', function () {
+        return redirect()->route('landing');
+    })->name('dashboard');
 
     // Profile
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
