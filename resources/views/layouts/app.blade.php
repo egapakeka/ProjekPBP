@@ -5,7 +5,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+        <title>{{ config('app.name', 'TokoKita') }}</title>
+
+        <link rel="icon" type="image/png" href="{{ asset('images/mainLogo/logo.png') }}">
+        <link rel="apple-touch-icon" href="{{ asset('images/mainLogo/logo.png') }}">
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
@@ -15,6 +18,8 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
         <!-- Scripts -->
+        <link rel="icon" href="{{ asset('images/mainLogo/logo.png?v=2') }}" type="png">
+
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="font-sans antialiased">

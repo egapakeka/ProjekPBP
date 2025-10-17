@@ -18,14 +18,17 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="font-sans antialiased bg-gray-100">
-
-    <!-- Use landing-style navbar for consistent UI -->
-    @include('partials.landing-navbar')
-
-
     <!-- Main Content -->
     <main class="py-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            @if(auth()->check() && auth()->user()->role === 'admin')
+                <div class="mb-4">
+                    <a href="{{ route('admin.dashboard') }}" class="inline-flex items-center text-sm font-semibold text-primary hover:text-orange-500">
+                        <i class="fas fa-arrow-left mr-2"></i>{{ __('Kembali ke Dashboard Admin') }}
+                    </a>
+                </div>
+            @endif
+
             <!-- Header -->
             <div class="mb-8">
                 <h1 class="text-3xl font-bold text-gray-900">Katalog Produk</h1>
