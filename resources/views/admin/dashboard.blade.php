@@ -93,7 +93,7 @@
                             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
                                 @foreach($category->products as $product)
                                     <div class="bg-gray-50 rounded-lg overflow-hidden hover:shadow-lg transition duration-300 cursor-pointer"
-                                         onclick="window.location='{{ route('products.show', $product) }}'">
+                                        onclick="window.location='{{ route('products.show', $product->id) }}'">
                                         <!-- Product Image -->
                                         <div class="aspect-w-1 aspect-h-1 bg-gray-200">
                                             @if($product->image)
