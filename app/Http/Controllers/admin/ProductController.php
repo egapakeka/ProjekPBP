@@ -97,7 +97,7 @@ class ProductController extends Controller
         if ($request->hasFile('image')) {
             // Delete old image if exists
             if ($product->image) {
-                \Storage::disk('public')->delete($product->image);
+                Storage::disk('public')->delete($product->image);
             }
             $imagePath = $request->file('image')->store('products', 'public');
         }
@@ -123,7 +123,7 @@ class ProductController extends Controller
     {
         // Delete image file if exists
         if ($product->image) {
-            \Storage::disk('public')->delete($product->image);
+            Storage::disk('public')->delete($product->image);
         }
         
         $product->delete();

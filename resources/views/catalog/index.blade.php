@@ -18,6 +18,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="font-sans antialiased bg-gray-100">
+
     <!-- Navigation -->
     <nav class="bg-white shadow-sm border-b">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -37,9 +38,6 @@
                 </div>
                 <div class="flex items-center space-x-4">
                     @auth
-                        <a href="{{ route('admin.dashboard') }}" class="text-gray-500 hover:text-gray-700 px-3 py-2 text-sm font-medium">
-                            Dashboard
-                        </a>
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
                             <button type="submit" class="text-gray-500 hover:text-gray-700 px-3 py-2 text-sm font-medium">
@@ -58,6 +56,7 @@
             </div>
         </div>
     </nav>
+
 
     <!-- Main Content -->
     <main class="py-8">

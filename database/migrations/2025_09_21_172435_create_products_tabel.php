@@ -20,7 +20,7 @@ return new class extends Migration
             $table->integer('stock');
             $table->foreignId('category_id')->constrained('categories')->onDelete('cascade');
             $table->boolean('is_active')->default(true);
-            $table->timestamp('created_at')->useCurrent();
+            $table->timestamps();
         });
     }
 

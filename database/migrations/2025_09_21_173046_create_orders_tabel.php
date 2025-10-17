@@ -17,7 +17,7 @@ return new class extends Migration
             $table->decimal('total', 12, 2);
             $table->string('status')->default('pending');
             $table->text('address_text');
-            $table->timestamp('created_at')->useCurrent();
+            $table->timestamps();
         });
     }
 
