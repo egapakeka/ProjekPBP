@@ -36,44 +36,53 @@
                         </button>
                     </form>
 
-                    <!-- Menu Admin (hanya jika login) -->
+                    <!-- Menu Admin / User -->
                     @auth
-                        <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">
-                            {{ __('Dashboard') }}
-                        </x-nav-link>
-
-                        <x-nav-link :href="route('admin.categories.index')" :active="request()->routeIs('admin.categories.*')">
-                            {{ __('Ubah Kategori') }}
-                        </x-nav-link>
-
-                        <x-nav-link :href="route('admin.products.index')" :active="request()->routeIs('admin.products.*')">
-                            {{ __('Ubah Produk') }}
-                        </x-nav-link>
-
-                        <x-nav-link :href="route('admin.orders.index')" :active="request()->routeIs('admin.orders.*')">
-                            {{ __('Pesanan') }}
-                        </x-nav-link>
-
-                        <x-nav-link :href="route('admin.vouchers.index')" :active="request()->routeIs('admin.vouchers.*')">
-                            {{ __('Voucher') }}
-                        </x-nav-link>
-
-                        <x-nav-link :href="route('admin.deliveries.index')" :active="request()->routeIs('admin.deliveries.*')">
-                            {{ __('Pengiriman') }}
-                        </x-nav-link>
-
-                        @if(auth()->user()->role !== 'admin')
-                            @php($cartCount = auth()->user()->cart?->items()->sum('qty') ?? 0)
-                            <x-nav-link :href="route('cart.index')" :active="request()->routeIs('cart.*')">
-                                {{ __('Keranjang') }}
-                                @if($cartCount > 0)
-                                    <span class="ml-2 inline-flex items-center rounded-full bg-primary/10 px-2 py-0.5 text-xs font-semibold text-primary">
-                                        {{ $cartCount }}
-                                    </span>
-                                @endif
+                        @if(auth()->user()->role === 'admin')
+                            <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">
+                                {{ __('Dashboard') }}
                             </x-nav-link>
-                        @endif
 
+                            <x-nav-link :href="route('admin.categories.index')" :active="request()->routeIs('admin.categories.*')">
+                                {{ __('Ubah Kategori') }}
+                            </x-nav-link>
+
+                            <x-nav-link :href="route('admin.products.index')" :active="request()->routeIs('admin.products.*')">
+                                {{ __('Ubah Produk') }}
+                            </x-nav-link>
+
+                            <x-nav-link :href="route('admin.orders.index')" :active="request()->routeIs('admin.orders.*')">
+                                {{ __('Pesanan') }}
+                            </x-nav-link>
+
+                            <x-nav-link :href="route('admin.vouchers.index')" :active="request()->routeIs('admin.vouchers.*')">
+                                {{ __('Voucher') }}
+                            </x-nav-link>
+
+                            <x-nav-link :href="route('admin.deliveries.index')" :active="request()->routeIs('admin.deliveries.*')">
+                                {{ __('Pengiriman') }}
+                            </x-nav-link>
+                        @else
+                            @php($cartCount = auth()->user()->cart?->items()->sum('qty') ?? 0)
+                            <a href="{{ route('products.index') }}" class="text-gray-500 hover:text-gray-700 px-3 py-2 text-sm font-medium">
+                                {{ __('Produk') }}
+                            </a>
+                            <a href="{{ route('landing').'#about' }}" class="text-gray-500 hover:text-gray-700 px-3 py-2 text-sm font-medium">
+                                {{ __('Tentang') }}
+                            </a>
+                            <a href="{{ route('landing').'#help' }}" class="text-gray-500 hover:text-gray-700 px-3 py-2 text-sm font-medium">
+                                {{ __('Bantuan') }}
+                            </a>
+                            <a href="{{ route('faq') }}" class="text-gray-500 hover:text-gray-700 px-3 py-2 text-sm font-medium">
+                                {{ __('FAQ') }}
+                            </a>
+                            <a href="{{ route('cart.index') }}" class="text-gray-500 hover:text-gray-700 px-3 py-2 text-sm font-medium inline-flex items-center">
+                                {{ __('Keranjang') }}
+                                <span data-cart-count-badge class="ml-2 inline-flex items-center rounded-full bg-primary/10 px-2 py-0.5 text-xs font-semibold text-primary {{ $cartCount > 0 ? '' : 'hidden' }}">
+                                    <span data-cart-count-value>{{ $cartCount }}</span>
+                                </span>
+                            </a>
+                        @endif
                     @endauth
                 </div>
             </div>
@@ -94,10 +103,13 @@
                         </x-slot>
 
                         <x-slot name="content">
-                            @php($isAdmin = auth()->user()->role === 'admin')
-                            <x-dropdown-link :href="route($isAdmin ? 'admin.profile.edit' : 'profile.edit')">
-                                {{ $isAdmin ? __('Profil Admin') : __('Profile') }}
+                            @php($user = auth()->user())
+                            @php($isAdmin = $user->role === 'admin')
+
+                            <x-dropdown-link :href="$isAdmin ? route('admin.profile.edit') : route('profile.edit')">
+                                {{ __('Profil Saya') }}
                             </x-dropdown-link>
+
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
                                 <x-dropdown-link :href="route('logout')"
@@ -168,39 +180,53 @@
 
             <!-- Menu Admin (hanya jika login) -->
             @auth
-                <x-responsive-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">
-                    {{ __('Dashboard') }}
-                </x-responsive-nav-link>
+                @if(auth()->user()->role === 'admin')
+                    <x-responsive-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">
+                        {{ __('Dashboard') }}
+                    </x-responsive-nav-link>
 
-                <x-responsive-nav-link :href="route('admin.categories.index')" :active="request()->routeIs('admin.categories.*')">
-                    {{ __('Ubah Kategori') }}
-                </x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('admin.categories.index')" :active="request()->routeIs('admin.categories.*')">
+                        {{ __('Ubah Kategori') }}
+                    </x-responsive-nav-link>
 
-                <x-responsive-nav-link :href="route('admin.products.index')" :active="request()->routeIs('admin.products.*')">
-                    {{ __('Ubah Produk') }}
-                </x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('admin.products.index')" :active="request()->routeIs('admin.products.*')">
+                        {{ __('Ubah Produk') }}
+                    </x-responsive-nav-link>
 
-                <x-responsive-nav-link :href="route('admin.orders.index')" :active="request()->routeIs('admin.orders.*')">
-                    {{ __('Pesanan') }}
-                </x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('admin.orders.index')" :active="request()->routeIs('admin.orders.*')">
+                        {{ __('Pesanan') }}
+                    </x-responsive-nav-link>
 
-                <x-responsive-nav-link :href="route('admin.vouchers.index')" :active="request()->routeIs('admin.vouchers.*')">
-                    {{ __('Voucher') }}
-                </x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('admin.vouchers.index')" :active="request()->routeIs('admin.vouchers.*')">
+                        {{ __('Voucher') }}
+                    </x-responsive-nav-link>
 
-                <x-responsive-nav-link :href="route('admin.deliveries.index')" :active="request()->routeIs('admin.deliveries.*')">
-                    {{ __('Pengiriman') }}
-                </x-responsive-nav-link>
-
-                @if(auth()->user()->role !== 'admin')
+                    <x-responsive-nav-link :href="route('admin.deliveries.index')" :active="request()->routeIs('admin.deliveries.*')">
+                        {{ __('Pengiriman') }}
+                    </x-responsive-nav-link>
+                @else
                     @php($cartCount = auth()->user()->cart?->items()->sum('qty') ?? 0)
-                    <x-responsive-nav-link :href="route('cart.index')" :active="request()->routeIs('cart.*')">
+                    <x-responsive-nav-link href="{{ route('products.index') }}" :active="request()->routeIs('products.*')">
+                        {{ __('Produk') }}
+                    </x-responsive-nav-link>
+
+                    <x-responsive-nav-link href="{{ route('landing') }}#about">
+                        {{ __('Tentang') }}
+                    </x-responsive-nav-link>
+
+                    <x-responsive-nav-link href="{{ route('landing') }}#help">
+                        {{ __('Bantuan') }}
+                    </x-responsive-nav-link>
+
+                    <x-responsive-nav-link href="{{ route('faq') }}" :active="request()->routeIs('faq')">
+                        {{ __('FAQ') }}
+                    </x-responsive-nav-link>
+
+                    <x-responsive-nav-link href="{{ route('cart.index') }}" :active="request()->routeIs('cart.*')">
                         {{ __('Keranjang') }}
-                        @if($cartCount > 0)
-                            <span class="ml-2 inline-flex items-center rounded-full bg-primary/10 px-2 py-0.5 text-xs font-semibold text-primary">
-                                {{ $cartCount }}
-                            </span>
-                        @endif
+                        <span data-cart-count-badge class="ml-2 inline-flex items-center rounded-full bg-primary/10 px-2 py-0.5 text-xs font-semibold text-primary {{ $cartCount > 0 ? '' : 'hidden' }}">
+                            <span data-cart-count-value>{{ $cartCount }}</span>
+                        </span>
                     </x-responsive-nav-link>
                 @endif
 
@@ -211,14 +237,15 @@
         <div class="pt-4 pb-1 border-t border-gray-200">
             @auth
                 <div class="px-4">
-                    <div class="font-medium text-base text-gray-800">{{ Auth::user()->name }}</div>
-                    <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
+                    @php($user = auth()->user())
+                    @php($isAdmin = $user->role === 'admin')
+                    <div class="font-medium text-base text-gray-800">{{ $user->name }}</div>
+                    <div class="font-medium text-sm text-gray-500">{{ $user->email }}</div>
                 </div>
 
                 <div class="mt-3 space-y-1">
-                    @php($isAdmin = auth()->user()->role === 'admin')
-                    <x-responsive-nav-link :href="route($isAdmin ? 'admin.profile.edit' : 'profile.edit')">
-                        {{ $isAdmin ? __('Profil Admin') : __('Profile') }}
+                    <x-responsive-nav-link :href="$isAdmin ? route('admin.profile.edit') : route('profile.edit')">
+                        {{ __('Profil Saya') }}
                     </x-responsive-nav-link>
 
                     <form method="POST" action="{{ route('logout') }}">
