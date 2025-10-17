@@ -23,7 +23,16 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
                 <div class="flex items-center">
-                    @php($dashboardUrl = auth()->check() && auth()->user()->role === 'admin' ? route('admin.dashboard') : route('home'))
+                    @php
+                        if (auth()->check()) {
+                            $dashboardUrl = auth()->user()->role === 'admin'
+                            ? route('admin.dashboard')
+                            : route('dashboard'); // arahkan user biasa ke dashboard user
+                        } else {
+                            $dashboardUrl = route('dashboard');
+                        }
+                    @endphp
+
                     <a href="{{ $dashboardUrl }}" class="text-xl font-bold text-gray-800">
                         {{ config('app.name', 'Laravel') }}
                     </a>
