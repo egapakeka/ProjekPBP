@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->string('question');
             $table->text('answer');
-            $table->timestamp('created_at')->useCurrent();
             $table->timestamps();
         });
     }
