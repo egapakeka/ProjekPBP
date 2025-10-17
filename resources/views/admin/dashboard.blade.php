@@ -165,7 +165,7 @@
                         <i class="fas fa-store text-gray-400 text-6xl mb-4"></i>
                         <h3 class="text-xl font-semibold text-gray-600 mb-2">Belum Ada Produk</h3>
                         <p class="text-gray-500 mb-6">Saat ini belum ada produk yang tersedia di toko.</p>
-                        @if(auth()->user()->email === 'admin@admin.com' || auth()->user()->role === 'admin')
+                        @if(auth()->user()->role === 'admin')
                             <a href="{{ route('admin.products.create') }}" 
                                class="bg-primary hover:bg-orange-400 text-white px-6 py-3 rounded-lg font-medium">
                                 <i class="fas fa-plus mr-2"></i>Tambah Produk Pertama

@@ -165,10 +165,28 @@
                         <div class="space-y-4">
                             @auth
                                 @if($product->stock > 0)
-                                    <button class="w-full bg-primary hover:bg-orange-400 text-white font-bold py-3 px-6 rounded-lg transition duration-200">
-                                        <i class="fas fa-shopping-cart mr-2"></i>Tambah ke Keranjang
-                                    </button>
-                                    <button class="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-6 rounded-lg transition duration-200">
+                                    <form method="POST" action="{{ route('cart.store') }}" class="space-y-3">
+                                        @csrf
+                                        <input type="hidden" name="product_id" value="{{ $product->id }}">
+
+                                        <div>
+                                            <label for="qty" class="block text-sm font-medium text-gray-700">Jumlah</label>
+                                            <div class="mt-1 flex items-center space-x-3">
+                                                <input id="qty" name="qty" type="number" min="1" max="{{ $product->stock }}" value="{{ old('qty', 1) }}"
+                                                       class="w-24 rounded-lg border border-gray-300 px-3 py-2 focus:border-primary focus:ring-primary">
+                                                <span class="text-sm text-gray-500">dari {{ $product->stock }} tersedia</span>
+                                            </div>
+                                            @error('qty')
+                                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                            @enderror
+                                        </div>
+
+                                        <button type="submit" class="w-full bg-primary hover:bg-orange-400 text-white font-bold py-3 px-6 rounded-lg transition duration-200">
+                                            <i class="fas fa-shopping-cart mr-2"></i>Tambah ke Keranjang
+                                        </button>
+                                    </form>
+
+                                    <button type="button" class="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-6 rounded-lg transition duration-200">
                                         <i class="fas fa-bolt mr-2"></i>Beli Sekarang
                                     </button>
                                 @else

@@ -60,10 +60,19 @@
                         <x-nav-link :href="route('admin.deliveries.index')" :active="request()->routeIs('admin.deliveries.*')">
                             {{ __('Pengiriman') }}
                         </x-nav-link>
-                        
-                        <x-nav-link :href="route('admin.profile.edit')" :active="request()->routeIs('admin.profile.*')">
-                            {{ __('Profile Admin') }}
-                        </x-nav-link>
+
+                        @if(auth()->user()->role !== 'admin')
+                            @php($cartCount = auth()->user()->cart?->items()->sum('qty') ?? 0)
+                            <x-nav-link :href="route('cart.index')" :active="request()->routeIs('cart.*')">
+                                {{ __('Keranjang') }}
+                                @if($cartCount > 0)
+                                    <span class="ml-2 inline-flex items-center rounded-full bg-primary/10 px-2 py-0.5 text-xs font-semibold text-primary">
+                                        {{ $cartCount }}
+                                    </span>
+                                @endif
+                            </x-nav-link>
+                        @endif
+
                     @endauth
                 </div>
             </div>
@@ -84,8 +93,9 @@
                         </x-slot>
 
                         <x-slot name="content">
-                            <x-dropdown-link :href="route('profile.edit')">
-                                {{ __('Profile') }}
+                            @php($isAdmin = auth()->user()->role === 'admin')
+                            <x-dropdown-link :href="route($isAdmin ? 'admin.profile.edit' : 'profile.edit')">
+                                {{ $isAdmin ? __('Profil Admin') : __('Profile') }}
                             </x-dropdown-link>
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
@@ -156,9 +166,18 @@
                     {{ __('Pengiriman') }}
                 </x-responsive-nav-link>
 
-                <x-responsive-nav-link :href="route('admin.profile.edit')" :active="request()->routeIs('admin.profile.*')">
-                    {{ __('Profile Admin') }}
-                </x-responsive-nav-link>
+                @if(auth()->user()->role !== 'admin')
+                    @php($cartCount = auth()->user()->cart?->items()->sum('qty') ?? 0)
+                    <x-responsive-nav-link :href="route('cart.index')" :active="request()->routeIs('cart.*')">
+                        {{ __('Keranjang') }}
+                        @if($cartCount > 0)
+                            <span class="ml-2 inline-flex items-center rounded-full bg-primary/10 px-2 py-0.5 text-xs font-semibold text-primary">
+                                {{ $cartCount }}
+                            </span>
+                        @endif
+                    </x-responsive-nav-link>
+                @endif
+
             @endauth
         </div>
 
@@ -171,8 +190,9 @@
                 </div>
 
                 <div class="mt-3 space-y-1">
-                    <x-responsive-nav-link :href="route('profile.edit')">
-                        {{ __('Profile') }}
+                    @php($isAdmin = auth()->user()->role === 'admin')
+                    <x-responsive-nav-link :href="route($isAdmin ? 'admin.profile.edit' : 'profile.edit')">
+                        {{ $isAdmin ? __('Profil Admin') : __('Profile') }}
                     </x-responsive-nav-link>
 
                     <form method="POST" action="{{ route('logout') }}">

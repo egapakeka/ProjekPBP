@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\VoucherController;
 use App\Http\Controllers\Admin\AdminProfileController;
 use App\Http\Controllers\CategoryPublicController;
+use App\Http\Controllers\CartController;
 
 /*
 |--------------------------------------------------------------------------
@@ -56,6 +57,12 @@ Route::middleware(['auth'])->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
+    // Cart
+    Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+    Route::post('/cart', [CartController::class, 'store'])->name('cart.store');
+    Route::patch('/cart/items/{item}', [CartController::class, 'update'])->name('cart.items.update');
+    Route::delete('/cart/items/{item}', [CartController::class, 'destroy'])->name('cart.items.destroy');
+
     // Logout paksa (opsional)
     Route::get('/force-logout', function () {
         Auth::logout();
@@ -91,6 +98,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 
     // Admin Profile
     Route::get('/profile/edit', [AdminProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [AdminProfileController::class, 'update'])->name('profile.update');
+
 });
 
 /*
