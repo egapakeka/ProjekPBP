@@ -103,7 +103,24 @@
 
                         <div class="space-y-4">
                             @auth
-                                @if($product->stock > 0)
+                                @if(auth()->user()->role === 'admin')
+                                    <div class="flex flex-col gap-3 sm:flex-row">
+                                        <a href="{{ route('admin.products.edit', $product->id) }}"
+                                           class="flex-1 bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-3 px-6 rounded-lg text-center transition duration-200">
+                                            <i class="fas fa-edit mr-2"></i>Edit Produk
+                                        </a>
+                                        <form action="{{ route('admin.products.destroy', $product->id) }}" method="POST"
+                                              class="flex-1"
+                                              onsubmit="return confirm('Yakin ingin menghapus produk ini? Tindakan tidak dapat dibatalkan.');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit"
+                                                    class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-lg transition duration-200">
+                                                <i class="fas fa-trash mr-2"></i>Hapus Produk
+                                            </button>
+                                        </form>
+                                    </div>
+                                @elseif($product->stock > 0)
                                     <form id="product-action-form" method="POST" action="{{ route('cart.store') }}" class="space-y-3">
                                         @csrf
                                         <input type="hidden" name="product_id" value="{{ $product->id }}">
