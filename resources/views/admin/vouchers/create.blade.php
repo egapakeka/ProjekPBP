@@ -6,6 +6,8 @@
     </x-slot>
 
     <div class="container mx-auto py-6">
+        @php($oldType = old('discount_type', 'percent'))
+
         <form method="POST" action="{{ route('admin.vouchers.store') }}" class="space-y-4">
             @csrf
 
@@ -17,7 +19,7 @@
 
             <div>
                 <label class="block">Tipe Diskon</label>
-                <select name="discount_type" class="border rounded w-full px-3 py-2">
+                <select name="discount_type" class="border rounded w-full px-3 py-2" data-discount-type>
                     <option value="percent" {{ old('discount_type') == 'percent' ? 'selected' : '' }}>Persen</option>
                     <option value="fixed" {{ old('discount_type') == 'fixed' ? 'selected' : '' }}>Nominal</option>
                 </select>
@@ -25,8 +27,25 @@
             </div>
 
             <div>
-                <label class="block">Nilai Diskon</label>
-                <input type="number" step="0.01" name="discount_value" value="{{ old('discount_value') }}" class="border rounded w-full px-3 py-2">
+                <label class="block" data-discount-label>
+                    {{ $oldType === 'percent' ? 'Nilai Diskon (%)' : 'Nilai Diskon (Rp)' }}
+                </label>
+                <input
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    name="discount_value"
+                    value="{{ old('discount_value') }}"
+                    placeholder="{{ $oldType === 'percent' ? 'Contoh: 10' : 'Contoh: 50000' }}"
+                    class="border rounded w-full px-3 py-2"
+                    data-discount-value
+                >
+                <p class="mt-1 text-xs text-gray-500" data-discount-help>
+                    {{ $oldType === 'percent'
+                        ? 'Masukkan angka 1-100. Contoh: 10 berarti diskon 10%.'
+                        : 'Masukkan nominal diskon dalam rupiah.'
+                    }}
+                </p>
                 @error('discount_value') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
             </div>
 
@@ -35,9 +54,10 @@
                 <input type="number" step="0.01" name="min_purchase" value="{{ old('min_purchase') }}" class="border rounded w-full px-3 py-2">
             </div>
 
-            <div>
-                <label class="block">Maksimal Diskon</label>
-                <input type="number" step="0.01" name="max_discount" value="{{ old('max_discount') }}" class="border rounded w-full px-3 py-2">
+            <div class="{{ $oldType === 'percent' ? '' : 'hidden' }}" data-max-wrapper>
+                <label class="block">Maksimal Diskon (Rp)</label>
+                <input type="number" step="0.01" min="0" name="max_discount" value="{{ old('max_discount') }}" class="border rounded w-full px-3 py-2" data-max-input {{ $oldType === 'percent' ? '' : 'disabled' }}>
+                <p class="mt-1 text-xs text-gray-500">Opsional. Isi untuk membatasi potongan maksimum saat tipe persentase dipakai.</p>
             </div>
 
             <div>
@@ -68,4 +88,47 @@
             <a href="{{ route('admin.vouchers.index') }}" class="ml-2 text-gray-600">Batal</a>
         </form>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const typeSelect = document.querySelector('[data-discount-type]');
+            const valueInput = document.querySelector('[data-discount-value]');
+            const label = document.querySelector('[data-discount-label]');
+            const help = document.querySelector('[data-discount-help]');
+            const maxWrapper = document.querySelector('[data-max-wrapper]');
+            const maxInput = document.querySelector('[data-max-input]');
+
+            if (!typeSelect || !valueInput || !label || !help || !maxWrapper || !maxInput) {
+                return;
+            }
+
+            const syncDiscountFields = () => {
+                const type = typeSelect.value;
+
+                if (type === 'percent') {
+                    label.textContent = 'Nilai Diskon (%)';
+                    help.textContent = 'Masukkan angka 1-100. Contoh: 10 berarti diskon 10%.';
+                    valueInput.setAttribute('max', '100');
+                    valueInput.setAttribute('min', '0');
+                    valueInput.setAttribute('step', '0.01');
+                    valueInput.placeholder = 'Contoh: 10';
+                    maxWrapper.classList.remove('hidden');
+                    maxInput.disabled = false;
+                } else {
+                    label.textContent = 'Nilai Diskon (Rp)';
+                    help.textContent = 'Masukkan nominal diskon dalam rupiah.';
+                    valueInput.removeAttribute('max');
+                    valueInput.setAttribute('min', '0');
+                    valueInput.setAttribute('step', '0.01');
+                    valueInput.placeholder = 'Contoh: 50000';
+                    maxWrapper.classList.add('hidden');
+                    maxInput.value = '';
+                    maxInput.disabled = true;
+                }
+            };
+
+            syncDiscountFields();
+            typeSelect.addEventListener('change', syncDiscountFields);
+        });
+    </script>
 </x-app-layout>

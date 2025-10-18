@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProductCatalogController;
-use App\Http\Controllers\DeliveryController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\OrderController;
@@ -15,6 +14,7 @@ use App\Http\Controllers\Admin\AdminProfileController;
 use App\Http\Controllers\CategoryPublicController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\UserOrderController;
 
 use App\Http\Controllers\LandingController;
 
@@ -49,11 +49,6 @@ Route::view('/about', 'pages.about')->name('about');
 |--------------------------------------------------------------------------
 */
 Route::middleware(['auth'])->group(function () {
-    // Route landing untuk user login
-    Route::get('/landing', function () {
-        return view('landing');
-    })->name('landing');
-
     // Route dashboard yang redirect ke landing
     Route::get('/dashboard', function () {
         return redirect()->route('landing');
@@ -71,8 +66,13 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/cart/items/{item}', [CartController::class, 'destroy'])->name('cart.items.destroy');
 
     // Checkout
+    Route::post('/checkout/buy-now', [CheckoutController::class, 'buyNow'])->name('checkout.buy-now');
     Route::post('/checkout/summary', [CheckoutController::class, 'summary'])->name('checkout.summary');
     Route::post('/checkout/complete', [CheckoutController::class, 'store'])->name('checkout.store');
+
+    // Orders - Tracking pesanan user
+    Route::get('/orders', [UserOrderController::class, 'index'])->name('orders.index');
+    Route::get('/orders/{order}', [UserOrderController::class, 'show'])->name('orders.show');
 
     // Logout paksa (opsional)
     Route::get('/force-logout', function () {
@@ -103,9 +103,6 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 
     // Vouchers
     Route::resource('vouchers', VoucherController::class);
-
-    // Deliveries (Atur Pengiriman)
-    Route::resource('deliveries', DeliveryController::class);
 
     // Admin Profile
     Route::get('/profile/edit', [AdminProfileController::class, 'edit'])->name('profile.edit');

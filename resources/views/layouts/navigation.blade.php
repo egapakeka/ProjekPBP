@@ -53,9 +53,6 @@
                             {{ __('Voucher') }}
                         </x-nav-link>
 
-                        <x-nav-link :href="route('admin.deliveries.index')" :active="request()->routeIs('admin.deliveries.*')">
-                            {{ __('Pengiriman') }}
-                        </x-nav-link>
                     @else
                         <a href="{{ route('products.index') }}" class="text-gray-500 hover:text-gray-700 px-3 py-2 text-sm font-medium hover:text-primary">
                             {{ __('Produk') }}
@@ -66,7 +63,7 @@
                         <a href="{{ url('/#help') }}" class="text-gray-500 hover:text-gray-700 px-3 py-2 text-sm font-medium hover:text-primary">
                             {{ __('Bantuan') }}
                         </a>
-                        <a href="{{ route('faq') }}" class="text-gray-500 hover:text-gray-700 px-3 py-2 text-sm font-medium hover:text-primary">
+                        <a href="{{ url('/#faq') }}" class="text-gray-500 hover:text-gray-700 px-3 py-2 text-sm font-medium hover:text-primary">
                             {{ __('FAQ') }}
                         </a>
                     @endif
@@ -75,12 +72,16 @@
             </div>
 
             <!-- Settings Dropdown -->
+            @php($cartCount = auth()->check() ? (auth()->user()->cart?->items()->sum('qty') ?? 0) : 0)
             <div class="hidden sm:flex sm:items-center sm:ms-6 space-x-4">
                 @auth
                     @php($user = auth()->user())
                     @php($isAdmin = $user->role === 'admin')
+
                     @if(!$isAdmin)
-                        @php($cartCount = $user->cart?->items()->sum('qty') ?? 0)
+                        <a href="{{ route('orders.index') }}" class="relative inline-flex items-center rounded-lg px-3 py-2 text-sm font-medium text-gray-700 hover:text-primary">
+                            <i class="fas fa-box mr-2" style="font-size: 19px;"></i>
+                        </a>
                         <a href="{{ route('cart.index') }}" class="relative inline-flex items-center rounded-lg px-3 py-2 text-sm font-medium text-gray-700 hover:text-primary">
                             <i class="fas fa-shopping-cart mr-2" style="font-size: 19px;"></i>
                             <span data-cart-count-badge class="ml-2 inline-flex items-center rounded-full bg-primary px-2 py-0.5 text-xs font-semibold text-gray-700 {{ $cartCount > 0 ? '' : 'hidden' }}">
@@ -116,6 +117,15 @@
                         </x-slot>
                     </x-dropdown>
                 @else
+                    <a href="{{ route('login') }}" class="relative inline-flex items-center rounded-lg px-3 py-2 text-sm font-medium text-gray-700 hover:text-primary">
+                        <i class="fas fa-box mr-2" style="font-size: 19px;"></i>
+                    </a>
+                    <a href="{{ route('login') }}" class="relative inline-flex items-center rounded-lg px-3 py-2 text-sm font-medium text-gray-700 hover:text-primary">
+                        <i class="fas fa-shopping-cart mr-2" style="font-size: 19px;"></i>
+                        <span data-cart-count-badge class="ml-2 inline-flex items-center rounded-full bg-primary px-2 py-0.5 text-xs font-semibold text-gray-700 hidden">
+                            <span data-cart-count-value>0</span>
+                        </span>
+                    </a>
                     <a href="{{ route('login') }}" class="bg-primary text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-orange-400">
                         {{ __('Login') }}
                     </a>
@@ -198,9 +208,6 @@
                         {{ __('Voucher') }}
                     </x-responsive-nav-link>
 
-                    <x-responsive-nav-link :href="route('admin.deliveries.index')" :active="request()->routeIs('admin.deliveries.*')">
-                        {{ __('Pengiriman') }}
-                    </x-responsive-nav-link>
                 @else
                     @php($cartCount = auth()->user()->cart?->items()->sum('qty') ?? 0)
                     <x-responsive-nav-link href="{{ route('products.index') }}" :active="request()->routeIs('products.*')">
@@ -215,7 +222,7 @@
                         {{ __('Bantuan') }}
                     </x-responsive-nav-link>
 
-                    <x-responsive-nav-link href="{{ route('faq') }}" :active="request()->routeIs('faq')">
+                    <x-responsive-nav-link href="{{ url('/#faq') }}" :active="request()->routeIs('landing')">
                         {{ __('FAQ') }}
                     </x-responsive-nav-link>
 
@@ -225,8 +232,18 @@
                             <span data-cart-count-value>{{ $cartCount }}</span>
                         </span>
                     </x-responsive-nav-link>
+                    <x-responsive-nav-link href="{{ route('orders.index') }}" :active="request()->routeIs('orders.*')">
+                        {{ __('Pesanan Saya') }}
+                    </x-responsive-nav-link>
                 @endif
 
+            @else
+                <x-responsive-nav-link href="{{ route('login') }}">
+                    {{ __('Keranjang') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link href="{{ route('login') }}">
+                    {{ __('Pesanan Saya') }}
+                </x-responsive-nav-link>
             @endauth
         </div>
 

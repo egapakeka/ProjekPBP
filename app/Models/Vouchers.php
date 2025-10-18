@@ -14,18 +14,16 @@ class Vouchers extends Model
         'max_discount', 'start_date', 'end_date', 'usage_limit', 'per_user_limit',
     ];
 
-    public $timestamps = false; 
-
     // Relasi ke tabel usage
     public function usages()
     {
-        return $this->hasMany(Voucher_Usages::class);
+        return $this->hasMany(Voucher_Usages::class, 'voucher_id');
     }
 
     // Relasi ke user melalui tabel usage
     public function users()
     {
-        return $this->belongsToMany(User::class, 'voucher_usages')
+        return $this->belongsToMany(User::class, 'voucher_usages', 'voucher_id', 'user_id')
                     ->withPivot('order_id')
                     ->withTimestamps();
     }

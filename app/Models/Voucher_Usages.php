@@ -19,16 +19,16 @@ class Voucher_Usages extends Model
 
     public function voucher()
     {
-        return $this->belongsTo(Vouchers::class);
+        return $this->belongsTo(Vouchers::class, 'voucher_id');
     }
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function order()
     {
-        return $this->belongsTo(Orders::class);
+        return $this->belongsTo(Orders::class, 'order_id');
     }
 }

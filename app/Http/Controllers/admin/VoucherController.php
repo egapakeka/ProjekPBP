@@ -21,15 +21,13 @@ class VoucherController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'code' => 'required|unique:vouchers,code',
-            'discount_type' => 'required|in:percent,fixed',
-            'discount_value' => 'required|numeric',
-            'start_date' => 'required|date',
-            'end_date' => 'required|date|after_or_equal:start_date',
-        ]);
+        $validated = $request->validate($this->rules($request));
 
-        Vouchers::create($request->all());
+        if ($validated['discount_type'] !== 'percent') {
+            $validated['max_discount'] = null;
+        }
+
+        Vouchers::create($validated);
         return redirect()->route('admin.vouchers.index')->with('success', 'Voucher berhasil ditambahkan');
     }
 
@@ -43,15 +41,13 @@ class VoucherController extends Controller
     {
         $voucher = Vouchers::findOrFail($id);
 
-        $request->validate([
-            'code' => 'required|unique:vouchers,code,' . $voucher->id,
-            'discount_type' => 'required|in:percent,fixed',
-            'discount_value' => 'required|numeric',
-            'start_date' => 'required|date',
-            'end_date' => 'required|date|after_or_equal:start_date',
-        ]);
+        $validated = $request->validate($this->rules($request, $voucher));
 
-        $voucher->update($request->all());
+        if ($validated['discount_type'] !== 'percent') {
+            $validated['max_discount'] = null;
+        }
+
+        $voucher->update($validated);
         return redirect()->route('admin.vouchers.index')->with('success', 'Voucher berhasil diperbarui');
     }
 
@@ -66,5 +62,34 @@ class VoucherController extends Controller
     {
         $voucher = Vouchers::findOrFail($id);
         return view('admin.vouchers.show', compact('voucher'));
+    }
+
+    protected function rules(Request $request, ?Vouchers $voucher = null): array
+    {
+        $codeRule = 'required|unique:vouchers,code';
+
+        if ($voucher) {
+            $codeRule .= ',' . $voucher->id;
+        }
+
+        $rules = [
+            'code' => $codeRule,
+            'discount_type' => 'required|in:percent,fixed',
+            'discount_value' => 'required|numeric|min:0',
+            'min_purchase' => 'nullable|numeric|min:0',
+            'max_discount' => 'nullable|numeric|min:0',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:start_date',
+            'usage_limit' => 'nullable|integer|min:0',
+            'per_user_limit' => 'nullable|integer|min:0',
+        ];
+
+        if ($request->discount_type === 'percent') {
+            $rules['discount_value'] .= '|max:100';
+        } else {
+            $rules['max_discount'] = 'nullable';
+        }
+
+        return $rules;
     }
 }

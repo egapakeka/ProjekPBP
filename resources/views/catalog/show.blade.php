@@ -104,7 +104,7 @@
                         <div class="space-y-4">
                             @auth
                                 @if($product->stock > 0)
-                                    <form method="POST" action="{{ route('cart.store') }}" class="space-y-3">
+                                    <form id="product-action-form" method="POST" action="{{ route('cart.store') }}" class="space-y-3">
                                         @csrf
                                         <input type="hidden" name="product_id" value="{{ $product->id }}">
 
@@ -125,7 +125,11 @@
                                         </button>
                                     </form>
 
-                                    <button type="button" class="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-6 rounded-lg transition duration-200">
+                                    <button type="submit"
+                                            form="product-action-form"
+                                            formaction="{{ route('checkout.buy-now') }}"
+                                            formmethod="POST"
+                                            class="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-6 rounded-lg transition duration-200">
                                         <i class="fas fa-bolt mr-2"></i>Beli Sekarang
                                     </button>
                                 @else

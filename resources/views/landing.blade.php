@@ -56,6 +56,58 @@
         </div>
     </section>
 
+    {{-- FAQ --}}
+    <section id="faq" class="py-20 bg-white scroll-mt-28">
+        <div class="max-w-6xl mx-auto px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-center mb-4">FAQ - Pertanyaan Umum</h2>
+            <p class="max-w-3xl mx-auto text-center text-gray-600 mb-10">
+                Temukan jawaban cepat seputar pengiriman, pembayaran, dan layanan kami.
+            </p>
+
+            <div class="grid gap-6 md:grid-cols-2">
+                <div class="bg-gray-50 rounded-lg p-6 shadow-sm">
+                    <h3 class="font-semibold text-lg flex items-center gap-2 text-gray-900">
+                        <i class="fa-solid fa-truck text-green-600"></i>
+                        Bagaimana pengiriman dilakukan?
+                    </h3>
+                    <p class="text-gray-600 mt-2">
+                        Pengiriman dilakukan melalui kurir resmi dengan estimasi 2-5 hari kerja, tergantung lokasi tujuan.
+                    </p>
+                </div>
+
+                <div class="bg-gray-50 rounded-lg p-6 shadow-sm">
+                    <h3 class="font-semibold text-lg flex items-center gap-2 text-gray-900">
+                        <i class="fa-solid fa-credit-card text-yellow-600"></i>
+                        Metode pembayaran apa saja yang tersedia?
+                    </h3>
+                    <p class="text-gray-600 mt-2">
+                        Kami menerima transfer bank, e-wallet populer, serta pembayaran COD untuk wilayah tertentu.
+                    </p>
+                </div>
+
+                <div class="bg-gray-50 rounded-lg p-6 shadow-sm">
+                    <h3 class="font-semibold text-lg flex items-center gap-2 text-gray-900">
+                        <i class="fa-solid fa-rotate-left text-red-500"></i>
+                        Apakah bisa mengembalikan barang?
+                    </h3>
+                    <p class="text-gray-600 mt-2">
+                        Bisa. Ajukan permohonan retur maksimal 7 hari setelah barang diterima dengan menyertakan bukti kondisi produk.
+                    </p>
+                </div>
+
+                <div class="bg-gray-50 rounded-lg p-6 shadow-sm">
+                    <h3 class="font-semibold text-lg flex items-center gap-2 text-gray-900">
+                        <i class="fa-solid fa-headset text-blue-600"></i>
+                        Bagaimana cara menghubungi layanan pelanggan?
+                    </h3>
+                    <p class="text-gray-600 mt-2">
+                        Tim support kami siap membantu melalui email, WhatsApp, dan live chat di jam kerja Senin-Jumat.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
     {{-- Kontak ringkas, halaman lengkap di /help --}}
     <section id="help" class="py-20 container mx-auto px-6 scroll-mt-28">
         <h2 class="text-3xl font-bold text-center mb-6">Hubungi Kami</h2>

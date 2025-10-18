@@ -17,7 +17,7 @@
             <p><strong>Tanggal Berakhir:</strong> {{ $voucher->end_date }}</p>
             <p><strong>Batas Pemakaian Total:</strong> {{ $voucher->usage_limit ?? '-' }}</p>
             <p><strong>Batas Pemakaian per User:</strong> {{ $voucher->per_user_limit ?? '-' }}</p>
-            <p><strong>Dibuat pada:</strong> {{ $voucher->created_at }}</p>
+            <p><strong>Dibuat pada:</strong> {{ optional($voucher->created_at)->format('d M Y H:i') ?? '-' }}</p>
         </div>
 
         <div class="mt-6 space-x-2">

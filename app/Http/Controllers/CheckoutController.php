@@ -6,9 +6,11 @@ use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\Order_Items;
 use App\Models\Orders;
+use App\Models\Products;
 use App\Models\Vouchers;
 use App\Models\Voucher_Usages;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -22,42 +24,38 @@ class CheckoutController extends Controller
 
         $ids = $this->normalizeSelectedIds($validated['selected_items']);
 
-        if ($ids->isEmpty()) {
-            return redirect()->route('cart.index')->with('error', __('Pilih minimal satu produk untuk checkout.'));
-        }
+        return $this->buildSummaryResponse($ids);
+    }
 
-        $items = $this->getUserCartItems($ids->all());
-
-        if ($items->isEmpty()) {
-            return redirect()->route('cart.index')->with('error', __('Tidak ditemukan produk valid untuk checkout.'));
-        }
-
-        foreach ($items as $item) {
-            if (! $item->product) {
-                return redirect()->route('cart.index')->with('error', __('Salah satu produk tidak tersedia.'));
-            }
-
-            if ($item->product->stock < $item->qty) {
-                return redirect()->route('cart.index')->with('error', __('Stok untuk :product tidak mencukupi.', ['product' => $item->product->name]));
-            }
-        }
-
-        $total = $items->sum(fn (CartItem $item) => $item->product->price * $item->qty);
-        $totalQty = $items->sum('qty');
-
-        $user = Auth::user();
-
-        $vouchers = Vouchers::all()
-            ->filter(fn ($voucher) => $voucher->isValidFor($user, $total))
-            ->values();
-
-        return view('checkout.summary', [
-            'items' => $items,
-            'total' => $total,
-            'totalQty' => $totalQty,
-            'selectedIds' => $ids->implode(','),
-            'vouchers' => $vouchers,
+    public function buyNow(Request $request)
+    {
+        $validated = $request->validate([
+            'product_id' => ['required', 'exists:products,id'],
+            'qty' => ['required', 'integer', 'min:1'],
         ]);
+
+        $product = Products::findOrFail($validated['product_id']);
+
+        if ($product->stock < $validated['qty']) {
+            return back()->withErrors([
+                'qty' => __('Stok produk tersisa :stock unit.', ['stock' => $product->stock]),
+            ])->withInput();
+        }
+
+        $cart = Cart::firstOrCreate(['user_id' => Auth::id()]);
+
+        $item = $cart->items()->where('product_id', $product->id)->first();
+
+        if ($item) {
+            $item->update(['qty' => $validated['qty']]);
+        } else {
+            $item = $cart->items()->create([
+                'product_id' => $product->id,
+                'qty' => $validated['qty'],
+            ]);
+        }
+
+        return $this->buildSummaryResponse(collect([$item->id]));
     }
 
     public function store(Request $request)
@@ -170,5 +168,45 @@ class CheckoutController extends Controller
             ->where('cart_id', $cart->id)
             ->whereIn('id', $ids)
             ->get();
+    }
+
+    protected function buildSummaryResponse(Collection $ids)
+    {
+        if ($ids->isEmpty()) {
+            return redirect()->route('cart.index')->with('error', __('Pilih minimal satu produk untuk checkout.'));
+        }
+
+        $items = $this->getUserCartItems($ids->all());
+
+        if ($items->isEmpty()) {
+            return redirect()->route('cart.index')->with('error', __('Tidak ditemukan produk valid untuk checkout.'));
+        }
+
+        foreach ($items as $item) {
+            if (! $item->product) {
+                return redirect()->route('cart.index')->with('error', __('Salah satu produk tidak tersedia.'));
+            }
+
+            if ($item->product->stock < $item->qty) {
+                return redirect()->route('cart.index')->with('error', __('Stok untuk :product tidak mencukupi.', ['product' => $item->product->name]));
+            }
+        }
+
+        $total = $items->sum(fn (CartItem $item) => $item->product->price * $item->qty);
+        $totalQty = $items->sum('qty');
+
+        $user = Auth::user();
+
+        $vouchers = Vouchers::all()
+            ->filter(fn ($voucher) => $voucher->isValidFor($user, $total))
+            ->values();
+
+        return view('checkout.summary', [
+            'items' => $items,
+            'total' => $total,
+            'totalQty' => $totalQty,
+            'selectedIds' => $ids->implode(','),
+            'vouchers' => $vouchers,
+        ]);
     }
 }

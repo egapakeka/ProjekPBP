@@ -39,7 +39,7 @@ class Orders extends Model
 
     public function vouchers()
     {
-        return $this->belongsToMany(Vouchers::class, 'voucher_usages')
+        return $this->belongsToMany(Vouchers::class, 'voucher_usages', 'order_id', 'voucher_id')
                     ->withPivot('user_id')
                     ->withTimestamps();
     }

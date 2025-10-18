@@ -6,8 +6,8 @@
             <a href="{{ route('products.index') }}" class="hover:text-primary">Produk</a>
             <!-- Point to landing page anchors so clicks from other pages scroll to the correct section -->
             <a href="{{ url('/#about') }}" class="hover:text-primary">Tentang</a>
+            <a href="{{ url('/#faq') }}" class="hover:text-primary">FAQ</a>
             <a href="{{ url('/#help') }}" class="hover:text-primary">Bantuan</a>
-            <a href="{{ route('faq') }}" class="hover:text-primary">FAQ</a>
         </nav>
 
         {{-- Guest: Login --}}
