@@ -1,1 +1,38 @@
-<?php\n\nuse Illuminate\\Database\\Migrations\\Migration;\nuse Illuminate\\Database\\Schema\\Blueprint;\nuse Illuminate\\Support\\Facades\\Schema;\n\nreturn new class extends Migration\n{\n    public function up(): void\n    {\n        Schema::table('orders', function (Blueprint ) {\n            if (! Schema::hasColumn('orders', 'discount')) {\n                ->decimal('discount', 12, 2)->default(0);\n            }\n\n            if (! Schema::hasColumn('orders', 'final_amount')) {\n                ->decimal('final_amount', 12, 2)->default(0);\n            }\n        });\n    }\n\n    public function down(): void\n    {\n        Schema::table('orders', function (Blueprint ) {\n            if (Schema::hasColumn('orders', 'discount')) {\n                ->dropColumn('discount');\n            }\n\n            if (Schema::hasColumn('orders', 'final_amount')) {\n                ->dropColumn('final_amount');\n            }\n        });\n    }\n};\n
+﻿<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        if (! Schema::hasColumn('orders', 'discount')) {
+            Schema::table('orders', function (Blueprint $table) {
+                $table->decimal('discount', 12, 2)->default(0);
+            });
+        }
+
+        if (! Schema::hasColumn('orders', 'final_amount')) {
+            Schema::table('orders', function (Blueprint $table) {
+                $table->decimal('final_amount', 12, 2)->default(0);
+            });
+        }
+    }
+
+    public function down(): void
+    {
+        if (Schema::hasColumn('orders', 'discount')) {
+            Schema::table('orders', function (Blueprint $table) {
+                $table->dropColumn('discount');
+            });
+        }
+
+        if (Schema::hasColumn('orders', 'final_amount')) {
+            Schema::table('orders', function (Blueprint $table) {
+                $table->dropColumn('final_amount');
+            });
+        }
+    }
+};
