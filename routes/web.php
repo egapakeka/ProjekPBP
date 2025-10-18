@@ -73,6 +73,7 @@ Route::middleware(['auth'])->group(function () {
     // Orders - Tracking pesanan user
     Route::get('/orders', [UserOrderController::class, 'index'])->name('orders.index');
     Route::get('/orders/{order}', [UserOrderController::class, 'show'])->name('orders.show');
+    Route::patch('/orders/{order}/accept', [UserOrderController::class, 'markAsReceived'])->name('orders.accept');
 
     // Logout paksa (opsional)
     Route::get('/force-logout', function () {

@@ -28,6 +28,14 @@
 
     <div class="py-6">
         <div class="max-w-5xl mx-auto sm:px-6 lg:px-8 px-4 space-y-6">
+            @foreach (['success' => 'bg-green-100 text-green-800 border-green-200', 'error' => 'bg-red-100 text-red-800 border-red-200', 'info' => 'bg-blue-100 text-blue-800 border-blue-200'] as $type => $classes)
+                @if (session($type))
+                    <div class="border {{ $classes }} rounded-lg px-4 py-3 text-sm">
+                        {{ session($type) }}
+                    </div>
+                @endif
+            @endforeach
+
             <div class="bg-white shadow-sm sm:rounded-lg">
                 <div class="px-6 py-6 border-b border-gray-100 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                     <div>
@@ -145,6 +153,17 @@
                    class="inline-flex items-center rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition">
                     <i class="fas fa-arrow-left mr-2"></i>{{ __('Kembali ke Daftar Pesanan') }}
                 </a>
+                @if (! in_array($order->status, ['selesai', 'dibatalkan']))
+                    <form method="POST" action="{{ route('orders.accept', $order) }}" class="inline-flex">
+                        @csrf
+                        @method('PATCH')
+                        <button type="submit"
+                                class="inline-flex items-center rounded-lg bg-green-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-700 transition"
+                                onclick="return confirm('Pastikan Anda sudah menerima pesanan ini?');">
+                            <i class="fas fa-check mr-2"></i>{{ __('Pesanan Diterima') }}
+                        </button>
+                    </form>
+                @endif
                 <a href="{{ route('products.index') }}"
                    class="inline-flex items-center rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-orange-500 transition">
                     <i class="fas fa-shopping-bag mr-2"></i>{{ __('Belanja Lagi') }}

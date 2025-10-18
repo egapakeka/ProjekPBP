@@ -26,4 +26,29 @@ class UserOrderController extends Controller
 
         return view('orders.show', compact('order'));
     }
+
+    public function markAsReceived(Request $request, Orders $order)
+    {
+        if ($order->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        if ($order->status === 'selesai') {
+            return redirect()
+                ->route('orders.show', $order)
+                ->with('info', 'Pesanan ini sudah ditandai selesai.');
+        }
+
+        if ($order->status === 'dibatalkan') {
+            return redirect()
+                ->route('orders.show', $order)
+                ->with('error', 'Pesanan yang dibatalkan tidak dapat ditandai selesai.');
+        }
+
+        $order->update(['status' => 'selesai']);
+
+        return redirect()
+            ->route('orders.show', $order)
+            ->with('success', 'Terima kasih! Pesanan telah ditandai selesai.');
+    }
 }
