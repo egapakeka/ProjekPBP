@@ -58,7 +58,7 @@
                                             <td class="px-4 py-4 text-gray-600">
                                                 {{ optional($order->created_at)->format('d M Y H:i') ?? '-' }}
                                             </td>
-                                            <td class="px-4 py-4">
+                                            <td class="px-4 py-4 text-right">
                                                 <span class="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold {{ $style['class'] }}">
                                                     {{ $style['label'] }}
                                                 </span>
@@ -69,11 +69,18 @@
                                             <td class="px-4 py-4 font-semibold text-gray-900">
                                                 Rp {{ number_format($finalAmount, 0, ',', '.') }}
                                             </td>
-                                            <td class="px-4 py-4 text-right">
-                                                <a href="{{ route('orders.show', $order->id) }}"
-                                                   class="inline-flex items-center rounded-lg border border-gray-300 px-3 py-2 text-xs font-semibold text-gray-700 hover:bg-gray-50 transition">
-                                                    {{ __('Lihat Detail') }}
-                                                </a>
+                                            <td class="px-4 py-4">
+                                                <div class="flex flex-col items-end gap-2">
+                                                    <a href="{{ route('orders.show', $order->id) }}"
+                                                       class="inline-flex items-center rounded-lg border border-gray-300 px-3 py-2 text-xs font-semibold text-gray-700 hover:bg-gray-50 transition">
+                                                        {{ __('Lihat Detail') }}
+                                                    </a>
+                                                    @if ($order->status === 'dibatalkan')
+                                                        <span class="text-xs font-semibold text-red-500">
+                                                            {{ __('Pesanan dibatalkan oleh admin.') }}
+                                                        </span>
+                                                    @endif
+                                                </div>
                                             </td>
                                         </tr>
                                     @endforeach
