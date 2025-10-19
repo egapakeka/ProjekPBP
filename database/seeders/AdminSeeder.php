@@ -19,7 +19,7 @@ class AdminSeeder extends Seeder
             ['email' => 'admin@example.com'],
             [
                 'name' => 'Admin Utama',
-                'password' => Hash::make('password123'), // jangan lupa diganti lebih aman
+                'password' => Hash::make('password123'),
                 'role' => 'admin',
                 'phone' => '081234567890',
                 'address' => 'Jl. Contoh No. 123, Jakarta',
