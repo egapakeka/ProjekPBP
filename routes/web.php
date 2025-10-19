@@ -11,7 +11,9 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\VoucherController;
 use App\Http\Controllers\Admin\AdminProfileController;
+use App\Http\Controllers\Admin\HelpTicketController;
 use App\Http\Controllers\CategoryPublicController;
+use App\Http\Controllers\HelpController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\UserOrderController;
@@ -40,8 +42,9 @@ Route::get('/categories/{category}', [CategoryPublicController::class, 'show'])-
 
 // Halaman statis
 Route::view('/faq', 'pages.faq')->name('faq');
-Route::view('/help', 'pages.help')->name('help');
+Route::get('/help', [HelpController::class, 'show'])->name('help');
 Route::view('/about', 'pages.about')->name('about');
+Route::post('/help', [HelpController::class, 'submit'])->name('help.submit');
 
 /*
 |--------------------------------------------------------------------------
@@ -104,6 +107,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 
     // Vouchers
     Route::resource('vouchers', VoucherController::class);
+
+    // Help tickets
+    Route::get('/help-tickets', [HelpTicketController::class, 'index'])->name('help-tickets.index');
 
     // Admin Profile
     Route::get('/profile/edit', [AdminProfileController::class, 'edit'])->name('profile.edit');

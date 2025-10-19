@@ -15,7 +15,7 @@ class DashboardController extends Controller
             $categoriesWithProducts = Category::with(['products' => function($query) {
                 $query->where('is_active', 1)
                       ->orderBy('created_at', 'desc')
-                      ->limit(4); // Batasi 4 produk per kategori untuk tampilan dashboard
+                      ->limit(4);
             }])->whereHas('products', function($query) {
                 $query->where('is_active', 1);
             })->get();
@@ -29,7 +29,6 @@ class DashboardController extends Controller
 
             return view('admin.dashboard', compact('categoriesWithProducts', 'totalProducts', 'totalCategories', 'lowStockProducts'));
         } catch (\Exception $e) {
-            // Fallback jika terjadi error
             $categoriesWithProducts = collect();
             $totalProducts = 0;
             $totalCategories = 0;

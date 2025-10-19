@@ -9,27 +9,18 @@ use App\Models\Category;
 
 class ProductController extends Controller
 {
-    /**
-     * Display a listing of the products.
-     */
     public function index()
     {
         $products = Products::with('category')->paginate(10);
         return view('admin.products.index', compact('products'));
     }
 
-    /**
-     * Show the form for creating a new product.
-     */
     public function create()
     {
         $categories = Category::all();
         return view('admin.products.create', compact('categories'));
     }
 
-    /**
-     * Store a newly created product in storage.
-     */
     public function store(Request $request)
     {
         $request->validate([
@@ -61,26 +52,17 @@ class ProductController extends Controller
                          ->with('success', 'Produk berhasil ditambahkan.');
     }
 
-    /**
-     * Display the specified product.
-     */
     public function show(Products $product)
     {
         return view('admin.products.show', compact('product'));
     }
 
-    /**
-     * Show the form for editing the specified product.
-     */
     public function edit(Products $product)
     {
         $categories = Category::all();
         return view('admin.products.edit', compact('product', 'categories'));
     }
 
-    /**
-     * Update the specified product in storage.
-     */
     public function update(Request $request, Products $product)
     {
         $request->validate([
@@ -95,7 +77,6 @@ class ProductController extends Controller
 
         $imagePath = $product->image;
         if ($request->hasFile('image')) {
-            // Delete old image if exists
             if ($product->image) {
                 Storage::disk('public')->delete($product->image);
             }
@@ -116,12 +97,8 @@ class ProductController extends Controller
                          ->with('success', 'Produk berhasil diperbarui.');
     }
 
-    /**
-     * Remove the specified product from storage.
-     */
     public function destroy(Products $product)
     {
-        // Delete image file if exists
         if ($product->image) {
             Storage::disk('public')->delete($product->image);
         }

@@ -8,9 +8,6 @@ use App\Models\Category;
 
 class ProductCatalogController extends Controller
 {
-    /**
-     * Display product catalog for visitors and users
-     */
     public function index(Request $request)
     {
         $categories = Category::all();
@@ -31,12 +28,8 @@ class ProductCatalogController extends Controller
         return view('catalog.index', compact('products', 'categories', 'selectedCategory', 'search'));
     }
 
-    /**
-     * Display product detail
-     */
     public function show(Products $product)
     {
-        // Only show active products
         if (!$product->is_active) {
             abort(404);
         }

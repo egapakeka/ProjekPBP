@@ -8,9 +8,6 @@ use Illuminate\Http\Request;
 
 class ProductCatalogController extends Controller
 {
-    /**
-     * Menampilkan katalog produk dengan search & filter kategori
-     */
     public function index(Request $request)
     {
         $search = $request->input('search');
@@ -19,7 +16,7 @@ class ProductCatalogController extends Controller
         $query = Product::with('category')
             ->where('is_active', 1);
 
-        // filter berdasarkan pencarian nama/desc
+        // filter berdasarkan pencarian nama
         if ($search) {
             $query->where(function($q) use ($search) {
                 $q->where('name', 'like', '%' . $search . '%')
@@ -46,9 +43,6 @@ class ProductCatalogController extends Controller
         ]);
     }
 
-    /**
-     * Menampilkan detail produk + produk terkait
-     */
     public function show(Product $product)
     {
         // cek kalau produk nonaktif
@@ -56,7 +50,7 @@ class ProductCatalogController extends Controller
             abort(404);
         }
 
-        // Ambil produk lain dari kategori yang sama (kecuali dirinya)
+        // Ambil produk lain dari kategori yang sama
         $relatedProducts = Product::where('category_id', $product->category_id)
             ->where('id', '!=', $product->id)
             ->where('is_active', 1)
