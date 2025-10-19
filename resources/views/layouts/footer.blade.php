@@ -24,9 +24,9 @@
         <div>
             <h3 class="text-lg font-semibold mb-3">Tentang Kami</h3>
             <ul class="space-y-2">
-                <li><a href="{{ url('/about') }}" class="text-gray-600 hover:text-gray-900">Profil Perusahaan</a></li>
-                <li><a href="{{ url('/about#visi') }}" class="text-gray-600 hover:text-gray-900">Visi & Misi</a></li>
-                <li><a href="{{ url('/about#tim') }}" class="text-gray-600 hover:text-gray-900">Tim Kami</a></li>
+                <li><a href="{{ url('/#about-profile') }}" class="text-gray-600 hover:text-gray-900">Profil Perusahaan</a></li>
+                <li><a href="{{ url('/#about-vision') }}" class="text-gray-600 hover:text-gray-900">Visi &amp; Misi</a></li>
+                <li><a href="{{ url('/#about-team') }}" class="text-gray-600 hover:text-gray-900">Tim Kami</a></li>
             </ul>
         </div>
     </div>

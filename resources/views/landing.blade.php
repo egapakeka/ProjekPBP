@@ -25,7 +25,7 @@
     </section>
 
     {{-- Produk Unggulan --}}
-    <section class="py-12 bg-gray-50">
+    <section id="products" class="py-12 bg-gray-50 scroll-mt-28">
         <div class="max-w-7xl mx-auto px-6 lg:px-8">
             <h2 class="text-3xl font-bold text-center mb-6">Produk Unggulan</h2>
 
@@ -36,8 +36,27 @@
                         <div class="p-4">
                             <h3 class="font-semibold text-lg">{{ $product->name }}</h3>
                             <p class="text-gray-600 text-sm">{{ $product->description }}</p>
-                            <p class="text-orange-500 font-bold mt-2">Rp {{ number_format($product->price, 0, ',', '.') }}</p>
-                            <a href="{{ route('products.index') }}" class="inline-block mt-3 bg-orange-500 hover:bg-orange-600 text-white text-sm px-4 py-2 rounded">Lihat Detail</a>
+                            <div class="mt-2 flex items-center justify-between">
+                                <p class="text-orange-500 font-bold">Rp {{ number_format($product->price, 0, ',', '.') }}</p>
+                                <span class="inline-flex items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-600">
+                                    <i class="fa-solid fa-fire mr-1 text-orange-500"></i>
+                                    Terjual {{ number_format($product->total_sold ?? 0, 0, ',', '.') }}
+                                </span>
+                            </div>
+                            <button
+                                type="button"
+                                class="inline-flex items-center justify-center mt-3 bg-orange-500 hover:bg-orange-600 text-white text-sm px-4 py-2 rounded transition focus:outline-none focus:ring-2 focus:ring-orange-300"
+                                data-product-detail
+                                data-product-name="{{ e($product->name) }}"
+                                data-product-description="{{ e($product->description) }}"
+                                data-product-price="Rp {{ number_format($product->price, 0, ',', '.') }}"
+                                data-product-image="{{ $product->image ? asset('storage/'.$product->image) : asset('images/mainLogo/logo.png') }}"
+                                data-product-category="{{ e(optional($product->category)->name ?? 'Umum') }}"
+                                data-product-stock="{{ $product->stock }}"
+                                data-product-sold="{{ number_format($product->total_sold ?? 0, 0, ',', '.') }}"
+                            >
+                                Lihat Detail
+                            </button>
                         </div>
                     </div>
                 @endforeach
@@ -45,14 +64,51 @@
         </div>
     </section>
 
-    {{-- Tentang (ringkas, halaman lengkap ada di /about) --}}
+    {{-- Tentang Kami --}}
     <section id="about" class="py-20 bg-gray-100 scroll-mt-28">
-        <div class="container mx-auto px-6 text-center">
-            <h2 class="text-3xl font-bold mb-6">Tentang TokoKita</h2>
-            <p class="max-w-2xl mx-auto text-gray-600">
-                TokoKita adalah platform e-commerce yang menyediakan berbagai kebutuhan Anda.
-                Untuk cerita lengkap kami, kunjungi halaman <a href="{{ route('about') }}" class="text-primary underline">Tentang Kami</a>.
-            </p>
+        <div class="max-w-6xl mx-auto px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold">Tentang TokoKita</h2>
+                <p class="mt-4 text-gray-600 max-w-3xl mx-auto">
+                    Marketplace Kampus UNDIP dibuat oleh mahasiswa, untuk mahasiswa. Kami hadir memberikan solusi belanja
+                    kebutuhan kuliah, teknologi, hingga gaya hidup harian dengan harga yang ramah kantong.
+                </p>
+            </div>
+
+            <div class="grid gap-8 md:grid-cols-3">
+                <div id="about-profile" class="bg-white shadow-sm rounded-xl p-6 text-center scroll-mt-28">
+                    <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-indigo-100 text-indigo-600 mb-4">
+                        <i class="fa-solid fa-building text-2xl"></i>
+                    </div>
+                    <h3 class="font-semibold text-lg mb-2">Profil Perusahaan</h3>
+                    <p class="text-gray-600 text-sm leading-relaxed">
+                        TokoKita adalah marketplace yang lahir dari kampus UNDIP, fokus menghadirkan pengalaman belanja online
+                        yang mudah, aman, dan terpercaya untuk seluruh civitas akademika.
+                    </p>
+                </div>
+
+                <div id="about-vision" class="bg-white shadow-sm rounded-xl p-6 text-center scroll-mt-28">
+                    <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-red-100 text-red-600 mb-4">
+                        <i class="fa-solid fa-bullseye text-2xl"></i>
+                    </div>
+                    <h3 class="font-semibold text-lg mb-2">Visi &amp; Misi</h3>
+                    <p class="text-gray-600 text-sm leading-relaxed">
+                        Menjadi platform utama mahasiswa dalam memenuhi kebutuhan sehari-hari dengan proses cepat,
+                        harga terjangkau, dan dukungan layanan pelanggan yang sigap.
+                    </p>
+                </div>
+
+                <div id="about-team" class="bg-white shadow-sm rounded-xl p-6 text-center scroll-mt-28">
+                    <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-green-100 text-green-600 mb-4">
+                        <i class="fa-solid fa-people-group text-2xl"></i>
+                    </div>
+                    <h3 class="font-semibold text-lg mb-2">Tim Kami</h3>
+                    <p class="text-gray-600 text-sm leading-relaxed">
+                        Dioperasikan oleh mahasiswa Informatika UNDIP yang berkomitmen menghadirkan inovasi dan kolaborasi
+                        demi kemajuan ekosistem digital kampus.
+                    </p>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -121,6 +177,69 @@
         </form>
     </section>
 
+    {{-- Modal Detail Produk --}}
+    <div
+        id="product-detail-modal"
+        class="fixed inset-0 z-50 hidden items-center justify-center px-4 py-8 flex"
+        aria-hidden="true"
+    >
+        <div class="absolute inset-0 bg-gray-900/60 backdrop-blur-sm" data-modal-overlay></div>
+        <div class="relative w-full max-w-3xl bg-white rounded-2xl shadow-2xl overflow-hidden">
+            <div class="absolute right-4 top-4">
+                <button
+                    type="button"
+                    class="rounded-full bg-gray-100 p-2 text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary"
+                    aria-label="Tutup detail produk"
+                    data-modal-close
+                >
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+            <div class="grid gap-6 md:grid-cols-[1.1fr,1.2fr]">
+                <div class="md:h-full">
+                    <img
+                        src=""
+                        alt="Produk"
+                        class="h-64 w-full object-cover md:h-full"
+                        data-modal-image
+                    >
+                </div>
+                <div class="p-6 space-y-4">
+                    <div class="space-y-1">
+                        <span class="inline-flex items-center rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary" data-modal-category></span>
+                        <h3 class="text-2xl font-semibold text-gray-900" data-modal-name></h3>
+                    </div>
+                    <p class="text-primary text-xl font-bold" data-modal-price></p>
+                    <p class="text-gray-600 text-sm leading-relaxed" data-modal-description></p>
+                    <div class="flex flex-wrap items-center gap-4 text-sm text-gray-500">
+                        <span class="inline-flex items-center gap-2">
+                            <i class="fa-solid fa-fire text-orange-500"></i>
+                            <span data-modal-sold></span>
+                        </span>
+                        <span class="inline-flex items-center gap-2">
+                            <i class="fa-solid fa-boxes-stacked text-primary"></i>
+                            <span data-modal-stock></span>
+                        </span>
+                    </div>
+                    <div class="flex flex-wrap gap-3 pt-2">
+                        <a
+                            href="{{ route('products.index') }}"
+                            class="inline-flex items-center justify-center rounded-lg border border-primary px-4 py-2 text-sm font-semibold text-primary hover:bg-primary hover:text-white transition"
+                        >
+                            Telusuri Produk Lain
+                        </a>
+                        <a
+                            href="{{ route('cart.index') }}"
+                            class="inline-flex items-center justify-center rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 transition"
+                        >
+                            Lihat Keranjang
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     {{-- Enable smooth scrolling for in-page anchors --}}
     <style>
         html { scroll-behavior: smooth; }
@@ -130,6 +249,79 @@
 
     {{-- Footer default (FAQ / Bantuan / Tentang) --}}
     @include('layouts.footer')
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const buttons = document.querySelectorAll('[data-product-detail]');
+            if (!buttons.length) {
+                return;
+            }
+
+            const modal = document.getElementById('product-detail-modal');
+            const overlay = modal?.querySelector('[data-modal-overlay]');
+            const closeBtn = modal?.querySelector('[data-modal-close]');
+
+            const imageEl = modal?.querySelector('[data-modal-image]');
+            const nameEl = modal?.querySelector('[data-modal-name]');
+            const priceEl = modal?.querySelector('[data-modal-price]');
+            const descriptionEl = modal?.querySelector('[data-modal-description]');
+            const stockEl = modal?.querySelector('[data-modal-stock]');
+            const categoryEl = modal?.querySelector('[data-modal-category]');
+            const soldEl = modal?.querySelector('[data-modal-sold]');
+
+            const openModal = (button) => {
+                if (!modal) return;
+
+                const {
+                    productName,
+                    productPrice,
+                    productDescription,
+                    productImage,
+                    productStock,
+                    productCategory,
+                    productSold,
+                } = button.dataset;
+
+                if (imageEl && productImage) {
+                    imageEl.src = productImage;
+                    imageEl.alt = productName || 'Produk';
+                }
+                if (nameEl) nameEl.textContent = productName || 'Produk';
+                if (priceEl) priceEl.textContent = productPrice || '-';
+                if (descriptionEl) descriptionEl.textContent = productDescription || 'Deskripsi belum tersedia.';
+                const stockValue = productStock ?? '-';
+                const soldValue = productSold && productSold.trim() !== '' ? productSold : '0';
+
+                if (stockEl) stockEl.textContent = `Stok tersedia: ${stockValue}`;
+                if (categoryEl) categoryEl.textContent = productCategory || 'Produk';
+                if (soldEl) soldEl.textContent = `Terjual ${soldValue}`;
+
+                modal.classList.remove('hidden');
+                modal.setAttribute('aria-hidden', 'false');
+                document.body.style.overflow = 'hidden';
+            };
+
+            const closeModal = () => {
+                if (!modal) return;
+                modal.classList.add('hidden');
+                modal.setAttribute('aria-hidden', 'true');
+                document.body.style.overflow = '';
+            };
+
+            buttons.forEach((button) => {
+                button.addEventListener('click', () => openModal(button));
+            });
+
+            overlay?.addEventListener('click', closeModal);
+            closeBtn?.addEventListener('click', closeModal);
+
+            document.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape' && !modal?.classList.contains('hidden')) {
+                    closeModal();
+                }
+            });
+        });
+    </script>
 
 </body>
 </html>
