@@ -22,7 +22,7 @@ class AdminSeeder extends Seeder
                 'password' => Hash::make('password123'),
                 'role' => 'admin',
                 'phone' => '081234567890',
-                'address' => 'Jl. Contoh No. 123, Jakarta',
+                'address' => 'Jl. Diponegoro, Jakarta',
             ]
         );
     }
